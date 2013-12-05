@@ -7,11 +7,11 @@ require "assetable/version"
 Gem::Specification.new do |s|
   s.name        = "assetable"
   s.version     = Assetable::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Assetable."
-  s.description = "TODO: Description of Assetable."
+  s.authors     = ["John Koht"]
+  s.email       = ["john@kohactive.com"]
+  s.homepage    = "http://www.github.com/kohactive/assetable"
+  s.summary     = "Dead simple asset uploader attachments for your active record models"
+  s.description = "Dead simple asset uploader attachments for your active record models"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
@@ -25,9 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "guard-rspec"
   s.add_development_dependency "guard-spork"
   s.add_development_dependency "sqlite3"
-
-  # s.add_development_dependency "bootstrap_sass_rails"
-  # s.add_development_dependency "simple_form"
 
   s.add_runtime_dependency 'carrierwave'
   s.add_runtime_dependency 'fog'
