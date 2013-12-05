@@ -4,6 +4,8 @@ Easily add Assets to your Active Record models, including images, videos and alm
 
 === Installation
 
+==== Add the Gem
+
 Add this line to your application's Gemfile:
 
     gem 'bootstrap_sass_rails'
@@ -16,16 +18,65 @@ Or install it yourself as:
 
     $ gem install bootstrap_sass_rails
     
+    
+==== Migrations    
 Run the migrations
 
     $ rake db:migrate
+    
+
+==== Assets for the uploader and UI
+
+Add the Stylesheet and Javascripts to your project:
+    
+    # Sass syntax
+    @import assetable
+    
+    # Assetable uses some of bootstrap's UI. You can import the partial bootstrap
+    # library to add some extra styles to the uploader
+    # @import bootstrap
+    
+Javascript:
+
+    //= import uploader
 
 
-=== Usage
+==== Configuration
+
+If you want to use fog, you can easily add the two initializers:
+
+    # initializers/assetable.rb
+    Assetable.configure do |config|
+      config.storage = :fog
+    end
+    
+    # initializers/carrierwave.rb
+    # Checkout carrierwave's documentation for more options and details
+    CarrierWave.configure do |config|
+      config.fog_credentials = {
+        :provider               => 'AWS',
+        :aws_access_key_id      => AWS_ACCESS_KEY_ID,
+        :aws_secret_access_key  => AWS_SECRET_ACCESS_KEY,
+        :region                 => S3_REGION,
+      }
+      config.fog_directory  = S3_NAMESPACE
+      config.fog_public     = true
+      config.fog_attributes = {'Cache-Control'=>'max-age=315576000'}
+      config.asset_host = S3_CLOUDFRONT_DOMAIN
+    end
+
+This is only required if you're using Fog. Otherwise, Assetable will default to uploading locally.
+
+
+== Usage
 
 Using assetable is incredibly easy. 
 
-=== Single Asset Attachment 
+=== Asset Attachments
+
+Assetable allows you to easily attach and asset to a resource. This creates a join between your record and an asset through an asset_attachment table. You can add as many as you would like to any given model.
+
+==== Single Asset Attachment 
 
 For a single image or asset, simply add: "assetable" to your model:
 
@@ -35,12 +86,11 @@ For a single image or asset, simply add: "assetable" to your model:
     
 You can name the asset attachment whatever you would like, in this case I used "avatar" but you can replace that with whatever you want.
 
-On the frontend, you can simple call @user.avatar to access the file.
+On the frontend, you can simple call @user.avatar to access the file. Note that @user.avatar will be a ActiveRecord object for Asset. The file itself will be accessible through @user.avatar.filename and since we're using carrierwave, you can access the different version as you normally would, e.g. @user.avatar.filename.thumbnail, etc.
 
+==== Multiple Asset Attachments
 
-=== Multiple Asset Attachments
-
-For multiple attachments, simple pass more attributes to assetable:
+For multiple attachments, simple pass more attributes to assetable. In theory, you can pass unlimited attributes to assetable and this will create an attachment for each.
 
     def User < ActiveRecord::Base
       assetable :avatar, :background, :hero
@@ -48,12 +98,78 @@ For multiple attachments, simple pass more attributes to assetable:
   
 This will create multiple attachments to the user model, you can easily call them by:
 
-    @user.avatar
+    @user.avatar #=> Asset Object
+    @user.avatar.filename #=> "/path/to/filename.extension"
+    # note this is a carrierwave uploader object, so you can access all of your versions
+    @user.avatar.filename.thumbnail
+    
     @user.background
     @user.hero
 
 
+=== Gallery Attachments
+Assetable allows you to attach galleries to any object. A gallery is a collection of assets grouped together for a specific record. 
 
+==== Single Gallery
+
+You can easily add a gallery to your object:
+    
+    class Project < ActiveRecord::Base
+      galleryable
+    end
+
+That is all you need to do to attach a gallery to your object. On the front-end, you can easily access your gallery and the attached assets:
+
+    # in your view or controller
+    @project.gallery #=> Gallery Object
+    @project.gallery.assets #=> Collection of Assets
+
+
+==== Multiple Galleries
+
+You can add numerous galleries to a single object. Just as we did with assets, you can declare as many galleries through the galleryable:
+
+    class Project < ActiveRecord::Base
+      galleryable :another_gallery, :one_more_gallery
+    end
+    
+By default, galleryable will create a default :gallery. So you don't have to every pass :gallery or any arguments if you only want one gallery. This is great for multiple gallery records.
+
+You can easily call these galleries:
+
+    @project.another_gallery #=> Gallery object
+    @project.another_gallery.assets #=> Asset collection
+    
+    @project.one_more_gallery
+    @project.one_more_gallery.assets
+    
+
+=== Adding the Uploader
+
+In order to start uploading assets, you'll need to add the uploader to your form. You can easily add an uploader or gallery using a simple form helper.
+
+==== Single Asset Uploader
+
+    = form_for @user do |f|
+      ...
+      = f.uploader :avatar
+      ...
+
+    # You can also pass typical params to the uploader
+    = form_for @user do |f|
+      = f.uploader :avatar, class: "classname", id: "something-else"
+      
+Make sure the assetable uploader javascript is added.
+
+
+==== Gallery Uploader
+
+    = form_for @user do |f|
+      ...
+      = f.gallery :gallery
+      ...
+      
+It's that easy!
 
 
 === Contributing
