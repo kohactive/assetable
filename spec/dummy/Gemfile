@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'haml-rails'
+gem 'sass-rails'
+gem 'bootstrap_sass_rails'
+gem 'simple_form'

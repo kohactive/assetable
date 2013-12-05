@@ -1,0 +1,32 @@
+= form_for @post do |f|
+  .row
+    = f.label :title
+    = f.text_field :title
+  .row
+    = f.label :body
+    = f.text_area :body
+  .row
+    = f.label :image
+    = f.uploader :image, class: "hadouken"
+
+  .row
+    = f.label :hero_image
+    = f.uploader :hero_image
+
+  .row
+    = f.label :gallery
+    = f.gallery :gallery
+
+  .row
+    = f.label :hadouken
+    = f.gallery :hadouken
+
+  .row
+    %h4 Sections
+    = f.fields_for :sections, (f.object.sections.build unless f.object.sections.present?) do |s|
+      = s.text_field :title
+      = s.uploader :image
+      = s.gallery :gallery
+
+  
+  = f.submit

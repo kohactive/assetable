@@ -1,0 +1,25 @@
+.modal.fade
+  .modal-dialog
+    .modal-content
+      = form_for [:assetable, @external_service], remote: true do |f|
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+          %h4.modal-title Third Party Service
+        .modal-body
+          
+          = hidden_field_tag :fieldname, params[:fieldname]
+
+          .form-group
+            = f.label :name
+            = f.text_field :name, class: "form-control", required: true
+          .form-group
+            = f.label :content_type
+            = f.select :content_type, ["iFrame", "Third Party API"]
+          .form-group
+            = f.label :body
+            = f.text_area :body, class: "form-control", required: true
+
+
+        .modal-footer
+          = button_tag "Cancel", class: "btn btn-default", :'data-dismiss' => "modal", type: "button"
+          = f.submit "Add Third Party Service", class: "btn btn-primary"

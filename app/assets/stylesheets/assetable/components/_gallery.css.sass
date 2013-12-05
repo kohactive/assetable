@@ -1,0 +1,118 @@
+// Backdrop dimmer
+.assetable-gallery-backdrop
+  background-color: rgba(0, 0, 0, .85)
+  left: 0
+  position: fixed
+  top: 0
+  height: 100%
+  width: 100%
+  z-index: 1001
+
+
+// Gallery wrapper
+.assetable-gallery-wrapper
+  +clearfix
+  border-radius: 2px
+  background: white
+  height: 90%
+  left: 5%
+  overflow-y: scroll
+  position: fixed
+  text-align: left
+  top: 5%
+  width: 90%
+  z-index: 1010
+  
+
+
+
+
+// Gallery header and footer
+// -------------------------
+.assetable-gallery-header,
+.assetable-gallery-footer
+  box-sizing: border-box
+  padding: 10px 20px
+  position: absolute
+  width: 100%
+
+.assetable-gallery-header
+  border-bottom: 1px solid #ddd
+  height: $assetable-gallery-header-height
+  top: 0
+
+  a,
+  h3
+    line-height: $assetable-gallery-header-height - 20px
+
+  a
+    float: right
+    font-size: 18px
+    font-weight: bold
+    text-decoration: none
+
+  h3
+    display: inline-block
+    margin: 0
+
+.assetable-gallery-footer
+  border-top: 1px solid #ddd
+  height: $assetable-gallery-footer-height
+  bottom: 0
+
+
+
+
+  
+// Main gallery components
+// -------------------------
+
+.assetable-gallery-wrapper .assetable-gallery
+  +clearfix
+  border-left: $uploader-border
+  border-top: $uploader-border
+  display: table
+  padding: $assetable-gallery-header-height 0 $assetable-gallery-footer-height 0
+
+// Preview item
+div.uploader-preview
+  border-right: $uploader-border
+  border-bottom: $uploader-border
+  display: table-cell
+  float: left
+  box-sizing: border-box
+  width: $uploader-width
+  vertical-align: middle
+
+
+@media (min-width: 1200px)
+  .assetable-gallery-wrapper
+    left: 50%
+    margin-left: -600px
+    max-width: 1200px
+    width: auto
+
+
+  .assetable-gallery > div.uploader-preview
+    width: 16.66666666%
+
+
+@media (min-width: 992px) and (max-width: 1199px)
+  .assetable-gallery-wrapper
+    max-width: 992px
+    margin-left: -496px
+    left: 50%
+
+    .assetable-gallery > div.uploader-preview
+      width: 20%
+
+
+@media (min-width: 768px) and (max-width: 992px)
+  .assetable-gallery-wrapper
+    max-width: 768px
+    margin-left: -384px
+    left: 50%
+
+    .assetable-gallery > div.uploader-preview
+      width: 25%
+

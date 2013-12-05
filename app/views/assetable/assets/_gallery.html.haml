@@ -1,0 +1,12 @@
+.assetable-gallery-header
+  %h3 Gallery
+  = link_to "&times;".html_safe, "#", class: "pull-right btn-close-assetable-gallery"
+
+.assetable-gallery
+  = render partial: 'asset', collection: assets, locals: {fieldname: fieldname}
+
+.assetable-gallery-footer
+  .assetable-gallery-paginate.pull-left
+    = paginate assets, remote: true
+  .pull-right
+    = link_to "insert asset", "#", class: "btn btn-primary btn-insert-asset"

@@ -1,0 +1,175 @@
+//
+// Uploader input and styles
+// --------------------------------------------------
+
+
+// Uploader general styles
+.uploadable
+  background-color: $uploader-background-color
+  border: $uploader-border
+  border-radius: $uploader-border-radius
+  font-family: "Helvetica Neue", "Arial", sans-serif
+  line-height: 1.3
+  height: auto
+  position: relative
+  width: $uploader-width
+  
+// Droppable - when a file is dragged above the element
+// and it becomes droppable
+.droppable:not(.uploader-has-asset)
+  background-color: $droppable-bg
+
+.droppable.uploader-has-asset > .uploader-directions
+  background-color: $droppable-bg
+
+
+
+
+// Uploader directions
+// -------------------------
+
+.uploadable > .uploader-directions
+  color: $uploader-text-color
+  padding: $uploader-padding/2 $uploader-padding
+  text-align: center
+  z-index: 11
+
+  a
+    color: $uploader-link-color
+    text-decoration: none
+
+  .uploader-directions-image
+    background: $uploader-image center center no-repeat
+    height: 50px
+
+
+// Uploader with an asset will not display
+// the uploader directions
+.uploader-has-asset .uploader-directions
+  background-color: #f8f8f8
+  border-top: $uploader-border
+
+  .uploader-directions-image
+    display: none
+
+  .uploader-directions-copy
+    font-size: $progress-bar-font-size - 2px
+
+
+
+
+
+// Uploader queue
+// -------------------------
+
+.uploadable > .upload-queue
+  list-style: none
+  margin: 0
+  min-height: 1px
+  padding: 0
+  width: 100%
+  z-index: 12
+
+  li
+    +clearfix
+    clear: both
+    display: block
+    margin-bottom: 0
+    position: relative
+    width: 100%
+
+    span.uploader-file-name
+      color: $progress-bar-color
+      font-size: $progress-bar-font-size - 2px
+      left: 0
+      line-height: $progress-bar-height
+      height: $progress-bar-height
+      overflow: hidden
+      padding: 0 10px
+      position: absolute
+      top: 0
+
+
+
+
+
+// Uploader Preview and actions
+// -------------------------
+
+.uploader-data-wrapper
+  +clearfix
+
+div.uploader-preview
+  padding: $uploader-padding
+  text-align: center
+
+  &:empty
+    padding: 0
+
+  img
+    height: 150px
+    margin-bottom: 10px
+    width: 150px
+
+  span
+    font-size: $progress-bar-font-size
+
+  span.uploader-name
+    display: block
+    font-weight: bold
+    margin-bottom: 5px
+    word-wrap: break-word
+    
+.uploader-size-and-actions
+  span,
+  div
+    display: inline
+    font-size: $progress-bar-font-size
+
+  .uploader-actions
+    margin-left: 10px
+    text-align: center
+
+    a.btn-uploader
+      color: #777
+      margin: 0 5px
+      text-decoration: underline
+
+
+
+
+
+
+// Gallery Uploader
+// -------------------------
+
+.gallery-uploader
+  padding: 0
+  width: 100%
+
+
+.gallery-uploader .uploadar-data-wrapper
+  +clearfix
+  text-align: left
+
+  div.uploader-preview
+    border-right: $uploader-border
+    box-sizing: border-box
+    display: inline-block
+    height: 275px
+    max-height: 275px
+    width: $uploader-width
+    vertical-align: middle
+
+    &:hover
+      cursor: move
+
+
+  .uploader-sortable-placeholder
+    @extend div.uploader-preview
+    background-color: darken(white, 3%)
+    border: 3px dotted darken(white, 10%) !important
+
+
+.gallery-uploader .uploader-directions
+  border-top: $uploader-border
