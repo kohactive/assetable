@@ -1,6 +1,5 @@
 require "carrierwave"
 require "fog"
-# require "rmagick"
 require "plupload-rails"
 require "kaminari"
 

@@ -10,7 +10,7 @@ PATH
       kaminari
       plupload-rails
       rails (~> 4.0.0)
-      rmagick
+      rmagick (~> 2.13.2)
       sass-rails
 
 GEM
