@@ -10,7 +10,7 @@ PATH
       jquery-rails
       kaminari
       plupload-rails
-      rails (~> 4.0.1)
+      rails (~> 4.0.0)
       rmagick
       sass-rails
 
