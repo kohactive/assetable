@@ -3,7 +3,6 @@ PATH
   specs:
     assetable (0.0.1)
       carrierwave
-      carrierwave-video-thumbnailer
       coffee-rails
       fog
       haml-rails
@@ -54,8 +53,6 @@ GEM
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
-    carrierwave-video-thumbnailer (0.1.4)
-      carrierwave
     celluloid (0.15.2)
       timers (~> 1.1.0)
     childprocess (0.3.9)

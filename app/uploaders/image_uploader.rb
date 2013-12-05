@@ -7,7 +7,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::RMagick
 
   # Choose what kind of storage to use for this uploader:
-  storage :file
+  storage Assetable.storage
 
   # More reliable content types
   process :set_content_type

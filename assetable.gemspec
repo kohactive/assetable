@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "simple_form"
 
   s.add_runtime_dependency 'carrierwave'
-  s.add_runtime_dependency 'carrierwave-video-thumbnailer'
   s.add_runtime_dependency 'fog'
   s.add_runtime_dependency 'rmagick'
   s.add_runtime_dependency 'plupload-rails'
