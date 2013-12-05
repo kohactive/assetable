@@ -1,3 +1,65 @@
 = Assetable
 
-This project rocks and uses MIT-LICENSE.
+Easily add Assets to your Active Record models, including images, videos and almost any kind of documents. Includes an uploader, media gallery and much more.
+
+=== Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'bootstrap_sass_rails'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install bootstrap_sass_rails
+    
+Run the migrations
+
+    $ rake db:migrate
+
+
+=== Usage
+
+Using assetable is incredibly easy. 
+
+=== Single Asset Attachment 
+
+For a single image or asset, simply add: "assetable" to your model:
+
+    class User < ActiveRecord::Base
+      assetable :avatar
+    end
+    
+You can name the asset attachment whatever you would like, in this case I used "avatar" but you can replace that with whatever you want.
+
+On the frontend, you can simple call @user.avatar to access the file.
+
+
+=== Multiple Asset Attachments
+
+For multiple attachments, simple pass more attributes to assetable:
+
+    def User < ActiveRecord::Base
+      assetable :avatar, :background, :hero
+    end
+  
+This will create multiple attachments to the user model, you can easily call them by:
+
+    @user.avatar
+    @user.background
+    @user.hero
+
+
+
+
+
+=== Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
