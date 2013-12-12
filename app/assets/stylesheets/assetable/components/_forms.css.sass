@@ -110,7 +110,6 @@ input[type="color"],
 .form-control
   +box-sizing(border-box)
   display: block
-  width: 100%
   height: $input-height-base
   // Make inputs at least the height of their button counterpart (base line-height + padding + border)
   padding: $padding-base-vertical $padding-base-horizontal
@@ -214,3 +213,7 @@ input[type="checkbox"],
   fieldset[disabled] &
     cursor: not-allowed
 
+
+input.input-fluid
+  +box-sizing(border-box)
+  width: 100%
