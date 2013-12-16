@@ -52,7 +52,11 @@ class ActionView::Helpers::FormBuilder
     elsif asset.video?
       preview_image_tag = image_tag(ActionController::Base.helpers.asset_path("assetable/icons/icon-mp4.png"), class: "uploader-preview")
     elsif asset.external_service?
-      preview_image_tag = image_tag(ActionController::Base.helpers.asset_path("assetable/icons/icon-document.png"), class: "uploader-preview")
+      if asset.has_icon?
+        preview_image_tag = image_tag(ActionController::Base.helpers.asset_path("assetable/icons/#{asset.icon}"), class: "uploader-preview")
+      else
+        preview_image_tag = image_tag(ActionController::Base.helpers.asset_path("assetable/icons/icon-document.png"), class: "uploader-preview")
+      end
     end
 
     return link_to preview_image_tag, asset.filename.to_s, target: "_blank"

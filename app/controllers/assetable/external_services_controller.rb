@@ -28,8 +28,11 @@ class Assetable::ExternalServicesController < ActionController::Base
   def permitted_params
     params.require(:external_service).permit(
       :name,
+      :filename,
       :body,
-      :content_type
+      :content_type,
+      :width,
+      :height
     )
   end
 

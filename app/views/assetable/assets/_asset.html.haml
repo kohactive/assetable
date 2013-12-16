@@ -8,7 +8,10 @@
     - elsif asset.video?
       = image_tag "assetable/icons/icon-mp4.png", class: "uploader-preview"
     - elsif asset.external_service?
-      = image_tag "assetable/icons/icon-document.png", class: "uploader-preview"
+      - if asset.has_icon?
+        = image_tag "assetable/icons/#{asset.icon}", class: "uploader-preview"
+      - else
+        = image_tag "assetable/icons/icon-document.png", class: "uploader-preview"
   
   %span.uploader-name= asset.name
   .uploader-size-and-actions

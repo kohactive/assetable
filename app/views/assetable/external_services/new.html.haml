@@ -11,10 +11,13 @@
 
           .form-group
             = f.label :name
-            = f.text_field :name, class: "form-control inpu-fluid", required: true
+            = f.text_field :name, class: "form-control input-fluid", required: true
           .form-group
             = f.label :content_type
             = f.select :content_type, ExternalService.possible_content_types
+          .form-group
+            = f.label :filename
+            = f.text_field :filename, class: "form-control input-fluid"
           .form-group
             = f.label :body
             = f.text_area :body, class: "form-control input-fluid", required: true

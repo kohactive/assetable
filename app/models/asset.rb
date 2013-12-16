@@ -1,3 +1,19 @@
+# Base Asset Class
+# ---------------------------------------
+# Available Attributes:
+# :type
+# :name
+# :body
+# :filename
+# :checksum
+# :path
+# :content_type
+# :file_size
+# :width
+# :height
+# :duration
+# :bit_rate
+
 class Asset < ActiveRecord::Base
 
   has_many :asset_attachments, :as => :assetable, :dependent => :destroy

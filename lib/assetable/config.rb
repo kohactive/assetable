@@ -3,7 +3,8 @@ module Assetable
 
     VALID_OPTION_KEYS = [
       :storage,
-      :external_document_types
+      :external_document_types,
+      :external_document_icons
     ]
     
     attr_accessor *VALID_OPTION_KEYS
