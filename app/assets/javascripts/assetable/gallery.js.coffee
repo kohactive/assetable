@@ -18,7 +18,7 @@ $(document).ready ->
         fieldname: field
         authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
         onUploaded: (resp) ->
-          $this.find('.uploadar-data-wrapper').append(resp.html)
+          $this.find('.uploader-data-wrapper').append(resp.html)
         fileRemoved: (button, item) ->
           $(button).closest('.uploader-preview').remove()
         fileUpdated: (resp) ->

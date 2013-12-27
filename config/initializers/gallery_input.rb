@@ -27,7 +27,7 @@ class ActionView::Helpers::FormBuilder
     end
 
     # Uploader HTML with the asset previews and actions
-    uploader_html = content_tag(:div, (asset_preview.html_safe), class: "uploadar-data-wrapper")
+    uploader_html = content_tag(:div, (asset_preview.html_safe), class: "uploader-data-wrapper")
 
     # Wrap the previews and uploader in a div
     uploader_wrapper = content_tag(:div, uploader_html, class: "gallery-uploader", id: options[:id], :'data-uploader-input-name' => fieldname)
