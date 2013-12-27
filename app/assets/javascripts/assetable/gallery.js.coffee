@@ -1,8 +1,6 @@
-$(document).ready ->
-
+bind_galleries = ->
   # Bind the koh uploader and galleries to a page
   $(".gallery-uploader").each ->
-    
     # Check that it's not already bound
     unless $(this).hasClass("uploadable")
       $(this).addClass "uploadable"
@@ -24,12 +22,17 @@ $(document).ready ->
         fileUpdated: (resp) ->
           $this.find('div.uploader-preview[data-asset-id="' + resp.id + '"]').replaceWith(resp.html)
 
-
-
         # Make the gallery sortable
         $(this).sortable
           items: "div.uploader-preview"
           distance: 50
           tolerance: 'pointer'
           placeholder: 'uploader-sortable-placeholder'
+
+
+window.Assetable.bind_galleries = bind_galleries
+
+$(document).ready ->
+
+  window.Assetable.bind_galleries()
 

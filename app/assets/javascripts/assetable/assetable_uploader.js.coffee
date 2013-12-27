@@ -194,11 +194,11 @@
 ) jQuery
 
 
-$(document).ready ->
 
+
+bind_uploaders = ->
   # Bind the koh uploader and galleries to a page
   $(".uploader").each ->
-    
     # Check that it's not already bound
     unless $(this).hasClass("uploadable")
       $(this).addClass "uploadable"
@@ -223,5 +223,10 @@ $(document).ready ->
           $this.find('div.uploader-preview[data-asset-id="' + resp.id + '"]').replaceWith(resp.html)
         # openAssetGallery: (button, item) ->
 
-          
 
+
+window.Assetable.bind_uploaders = bind_uploaders
+
+$(document).ready ->
+            
+  window.Assetable.bind_uploaders()

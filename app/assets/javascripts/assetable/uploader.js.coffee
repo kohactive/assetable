@@ -1,3 +1,5 @@
+#= require_self
+
 #= require moxie
 #= require plupload.dev
 #= require plupload.settings
@@ -8,3 +10,5 @@
 #= require assetable/assetable_uploader
 #= require assetable/gallery
 #= require assetable/asset_gallery
+
+window.Assetable = {}
