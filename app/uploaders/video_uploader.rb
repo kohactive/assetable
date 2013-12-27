@@ -1,16 +1,4 @@
 class VideoUploader < CarrierWave::Uploader::Base
-
-  storage Assetable.storage
-  
-  # Override the directory where uploaded files will be stored.
-  # This is a sensible default for uploaders that are meant to be mounted:
-  def store_dir
-    if model.present?
-      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-    else
-      "uploads/#{mounted_as}"
-    end
-  end
   
   # Create an MP4 version
   # version :mp4 do

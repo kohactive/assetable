@@ -38,9 +38,9 @@ class ActionView::Helpers::FormBuilder
     image_tag = asset_preview_image(asset)
     asset_name = content_tag(:span, asset.name.to_s, class: "uploader-name")
     asset_size = content_tag(:span, number_to_human_size(asset.file_size.to_s), class: "uploader-size")
-    asset_size_and_actions = content_tag(:div, (asset_size + asset_actions), class: "uploader-size-and-actions")
+    asset_size_and_actions = content_tag(:div, (asset_size + asset_actions(asset)), class: "uploader-size-and-actions")
     field = hidden_field_tag(fieldname, (asset.id))
-    return content_tag(:div, (image_tag + asset_name + asset_size_and_actions + field), class: "uploader-preview")
+    return content_tag(:div, (image_tag + asset_name + asset_size_and_actions + field), class: "uploader-preview", :'data-asset-id' => asset.id)
   end
 
   # Asset preview image or fallback to a content type image
@@ -63,9 +63,9 @@ class ActionView::Helpers::FormBuilder
   end
 
   # Asset actions, i.e.e remove and edit buttons
-  def asset_actions
+  def asset_actions asset
     remove_btn = link_to "delete", "#", class: "btn-uploader btn-uploader-remove-asset"
-    edit_btn = link_to "edit", "#", class: "btn-uploader btn-uploader-edit-asset"
+    edit_btn = link_to "edit", Rails.application.routes.url_helpers.edit_assetable_asset_path(asset), class: "btn-uploader btn-uploader-edit-asset", :'data-asset-id' => asset.id
     content_tag(:div, (remove_btn + edit_btn), class: "uploader-actions")
   end
 

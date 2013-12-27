@@ -62,7 +62,7 @@ class Asset < ActiveRecord::Base
       self.content_type = self.filename.file.content_type
       self.file_size = self.filename.file.size
       self.width, self.height = `identify -format "%wx%h" #{self.filename.file.path}`.split(/x/) unless self.document?
-      self.checksum = Digest::MD5.file(self.filename.file.path).to_s
+      # self.checksum = Digest::MD5.file(self.filename.to_s).to_s
     end
   end
 

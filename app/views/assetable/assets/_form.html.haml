@@ -1,0 +1,32 @@
+.assetable-assets.assetable-modal.modal.fade
+  .modal-dialog
+    .modal-content
+      = form_for [:assetable, @asset], url: assetable_asset_path(@asset, asset_type: @asset.type), remote: true, html: {class: "form-edit-asset"} do |f|
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+          %h4.modal-title Asset
+        .modal-body
+          
+          = hidden_field_tag :fieldname, params[:fieldname]
+          
+          .form-group
+            = f.label :name
+            = f.text_field :name, class: "form-control input-fluid", required: true
+          - unless f.object.filename.present?
+            .form-group
+              = f.label :filename
+              = f.text_field :filename, class: "form-control input-fluid"
+          .form-group
+            = f.label :body
+            = f.text_area :body, class: "form-control input-fluid"
+          .form-group.row
+            .col-xs-6
+              = f.label :width
+              = f.number_field :width, class: "form-control input-fluid"
+            .col-xs-6
+              = f.label :height
+              = f.number_field :height, class: "form-control input-fluid"
+
+        .modal-footer
+          = button_tag "Cancel", class: "btn btn-default", :'data-dismiss' => "modal", type: "button"
+          = f.submit "Save Asset", class: "btn btn-primary"

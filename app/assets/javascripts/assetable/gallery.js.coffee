@@ -21,6 +21,8 @@ $(document).ready ->
           $this.find('.uploadar-data-wrapper').append(resp.html)
         fileRemoved: (button, item) ->
           $(button).closest('.uploader-preview').remove()
+        fileUpdated: (resp) ->
+          $this.find('div.uploader-preview[data-asset-id="' + resp.id + '"]').replaceWith(resp.html)
 
 
 

@@ -1,26 +1,13 @@
 # encoding: utf-8
 
-class ImageUploader < CarrierWave::Uploader::Base
+class ImageUploader < AssetUploader
 
   include CarrierWave::MimeTypes
   # Include RMagick or MiniMagick support:
   include CarrierWave::RMagick
 
-  # Choose what kind of storage to use for this uploader:
-  storage Assetable.storage
-
   # More reliable content types
   process :set_content_type
-
-  # Override the directory where uploaded files will be stored.
-  # This is a sensible default for uploaders that are meant to be mounted:
-  def store_dir
-    if model.present?
-      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-    else
-      "uploads/#{mounted_as}"
-    end
-  end
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:

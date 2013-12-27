@@ -9,6 +9,7 @@
       fieldname: null
       FileUploaded: options.onUploaded
       fileRemoved: options.fileRemoved
+      fileUpdated: options.fileUpdated
       gallery: false
       id: null
       max_file_size: "10mb"
@@ -133,6 +134,26 @@
           assetable_uploader.options.fileRemoved this, assetable_uploader
 
 
+      $(assetable_uploader).on "click", ".btn-uploader-edit-asset", (e)->
+        e.preventDefault()
+        $.ajax
+          url: $(this).attr('href')
+          data: {fieldname: assetable_uploader.options.fieldname}
+          type: 'GET'
+
+          success: (response)->
+            $response = $(response)
+            $response.modal()
+
+            $('form.form-edit-asset').on 'ajax:beforeSend', ()->
+                # console.log "form submitting..."                
+
+            $('form.form-edit-asset').on 'ajax:success', (data, status, xhr)->
+              if status.success
+                $response.modal('hide').remove()
+                assetable_uploader.options.fileUpdated status
+
+
       $(assetable_uploader).on "click", ".btn-open-asset-gallery", (e)->
         e.preventDefault()
         $(assetable_uploader).asset_gallery({fieldname: assetable_uploader.options.fieldname})
@@ -198,6 +219,8 @@ $(document).ready ->
           return false unless $(item).hasClass("uploader-has-asset")
           $('.uploader-preview', item).html('<input type="hidden" name="' + field + '" />')
           $(item).removeClass("uploader-has-asset")
+        fileUpdated: (resp) ->
+          $this.find('div.uploader-preview[data-asset-id="' + resp.id + '"]').replaceWith(resp.html)
         # openAssetGallery: (button, item) ->
 
           
