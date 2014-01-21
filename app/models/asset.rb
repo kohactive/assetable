@@ -61,8 +61,7 @@ class Asset < ActiveRecord::Base
     if !self.external_service? and self.present? and self.changed?
       self.content_type = self.filename.file.content_type
       self.file_size = self.filename.file.size
-      self.width, self.height = `identify -format "%wx%h" #{self.filename.file.path}`.split(/x/) unless self.document?
-      # self.checksum = Digest::MD5.file(self.filename.to_s).to_s
+      self.width, self.height = `identify -format "%wx%h" #{self.filename.file.path}`.split(/x/) unless self.document? or self.width? or self.height?
     end
   end
 
