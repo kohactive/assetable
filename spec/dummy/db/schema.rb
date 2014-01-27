@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131126052623) do
+ActiveRecord::Schema.define(version: 20140121173312) do
 
   create_table "asset_attachments", force: true do |t|
     t.integer  "asset_id"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20131126052623) do
     t.integer  "bit_rate"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "ratio"
   end
 
   create_table "galleries", force: true do |t|
