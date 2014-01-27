@@ -8,7 +8,7 @@ Easily add Assets to your Active Record models, including images, videos and alm
 
 Add this line to your application's Gemfile:
 
-    gem 'assetable'
+    gem 'bootstrap_sass_rails'
 
 And then execute:
 
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install assetable
+    $ gem install bootstrap_sass_rails
     
     
 ==== Migrations    
