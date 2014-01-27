@@ -62,6 +62,7 @@ class Asset < ActiveRecord::Base
       self.content_type = self.filename.file.content_type
       self.file_size = self.filename.file.size
       self.width, self.height = `identify -format "%wx%h" #{self.filename.file.path}`.split(/x/) unless self.document? or self.width? or self.height?
+      self.ratio = self.width.to_f / self.height.to_f if self.width.present? and self.height.present?
     end
   end
 
