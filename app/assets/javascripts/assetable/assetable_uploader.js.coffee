@@ -5,6 +5,7 @@
     defaults =
       allow_select_mg: true
       authenticity_token: null
+      directions: 'or <a href="/assetable/external_services/new" class="btn-third-party-service">add third party service</a>'
       drag_drop: true
       fieldname: null
       FileUploaded: options.onUploaded
@@ -33,7 +34,7 @@
       # Create our extra HTML for the copy and queu
       # upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy">Drag and drop files or <a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">add them manually</a></div></div>'
       # upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy"><a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">select file</a> or <a href="#" class="btn-open-asset-gallery">open gallery</a></div></div>'
-      upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy"><a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">select file</a> or <a href="/assetable/external_services/new" class="btn-third-party-service">add third party service</a></div></div>'
+      upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy"><a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">select file</a> ' + assetable_uploader.options.directions + '</div></div>'
       upload_queue = '<ul class="upload-queue"></ul>'
       # Add to the uploader
       $(assetable_uploader).append(upload_directions)
@@ -211,6 +212,7 @@ bind_uploaders = ->
         multi_selection: false
         url: "/assetable/assets"
         fieldname: field
+        directions: $this.attr('data-uploader-directions')
         authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
         onUploaded: (resp) ->
           $this.find('.uploader-data-wrapper').html(resp.html)

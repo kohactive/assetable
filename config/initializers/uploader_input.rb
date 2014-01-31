@@ -7,12 +7,16 @@ class ActionView::Helpers::FormBuilder
   include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::NumberHelper
 
+  # = cf.uploader :attachment, select_file: true, text: "or drag and drop your PO"
+
   def uploader method, options = {}
     # add an ID to the options
     options[:id] = field_id(method, options[:index]) unless options[:id].present?
 
     # Set the fieldname
     fieldname = @object_name + "[#{method}_association_attributes][asset_id]"
+
+    directions = options[:directions] || ''
 
     # Create the uploader
     value = @object.nil? ? nil : @object.send(method)
@@ -28,7 +32,7 @@ class ActionView::Helpers::FormBuilder
     uploader_html = content_tag(:div, (asset_preview), class: "uploader-data-wrapper")
 
     # Create and return the uploader html
-    uploader_wrapper = content_tag(:div, uploader_html, class: "uploader #{'uploader-has-asset' if asset} #{options[:class]}", id: options[:id], :'data-uploader-input-name' => fieldname)
+    uploader_wrapper = content_tag(:div, uploader_html, class: "uploader #{'uploader-has-asset' if asset} #{options[:class]}", id: options[:id], :'data-uploader-input-name' => fieldname, :'data-uploader-directions' => directions)
     return uploader_wrapper
   end
 
