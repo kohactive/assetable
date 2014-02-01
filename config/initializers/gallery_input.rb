@@ -30,7 +30,7 @@ class ActionView::Helpers::FormBuilder
     uploader_html = content_tag(:div, (asset_preview.html_safe), class: "uploader-data-wrapper")
 
     # Wrap the previews and uploader in a div
-    uploader_wrapper = content_tag(:div, uploader_html, class: "gallery-uploader", id: options[:id], :'data-uploader-input-name' => fieldname)
+    uploader_wrapper = content_tag(:div, uploader_html, class: "gallery-uploader", id: options[:id], :'data-uploader-input-name' => fieldname, :'data-uploader-directions' => get_directions(options), :'data-max-file-size' => get_max_file_size(options))
     return uploader_wrapper
   end
 

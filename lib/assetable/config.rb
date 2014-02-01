@@ -3,6 +3,7 @@ module Assetable
 
     VALID_OPTION_KEYS = [
       :storage,
+      :max_file_size,
       :external_document_types,
       :external_document_icons
     ]

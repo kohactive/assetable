@@ -13,7 +13,7 @@
       fileUpdated: options.fileUpdated
       gallery: false
       id: null
-      max_file_size: "10mb"
+      max_file_size: options.max_file_size
       multiple_queues: true
       multi_selection: true
       max_file_count: 0
@@ -213,6 +213,7 @@ bind_uploaders = ->
         url: "/assetable/assets"
         fieldname: field
         directions: $this.attr('data-uploader-directions')
+        max_file_size: $this.attr("data-max-file-size")
         authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
         onUploaded: (resp) ->
           $this.find('.uploader-data-wrapper').html(resp.html)

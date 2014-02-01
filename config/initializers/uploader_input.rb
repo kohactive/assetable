@@ -16,8 +16,6 @@ class ActionView::Helpers::FormBuilder
     # Set the fieldname
     fieldname = @object_name + "[#{method}_association_attributes][asset_id]"
 
-    directions = options[:directions] || ''
-
     # Create the uploader
     value = @object.nil? ? nil : @object.send(method)
 
@@ -32,7 +30,7 @@ class ActionView::Helpers::FormBuilder
     uploader_html = content_tag(:div, (asset_preview), class: "uploader-data-wrapper")
 
     # Create and return the uploader html
-    uploader_wrapper = content_tag(:div, uploader_html, class: "uploader #{'uploader-has-asset' if asset} #{options[:class]}", id: options[:id], :'data-uploader-input-name' => fieldname, :'data-uploader-directions' => directions)
+    uploader_wrapper = content_tag(:div, uploader_html, class: "uploader #{'uploader-has-asset' if asset} #{options[:class]}", id: options[:id], :'data-uploader-input-name' => fieldname, :'data-uploader-directions' => get_directions(options), :'data-max-file-size' => get_max_file_size(options))
     return uploader_wrapper
   end
 
@@ -83,6 +81,14 @@ class ActionView::Helpers::FormBuilder
   def field_id label, index=nil
     output = index ? "_#{index}" : ''
     return @object_name + output + "_#{label}"
+  end
+
+  def get_max_file_size options
+    (options[:max_file_size] || Assetable.max_file_size || "10MB").to_s
+  end
+
+  def get_directions options
+    directions = options[:directions] || ''
   end
 
 end
