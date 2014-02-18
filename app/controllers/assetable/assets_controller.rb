@@ -1,10 +1,10 @@
 class Assetable::AssetsController < ActionController::Base
 
-  respond_to :html, :json
+  respond_to :html, :js
 
   def index
     @assets = Asset.page(params[:page]).per(20)
-    render json: { success: true, html: render_to_string(partial: "assetable/assets/gallery", locals: {assets: @assets, fieldname: params[:fieldname]})}
+    # render json: { success: true, html: render_to_string(partial: "assetable/assets/gallery", locals: {assets: @assets, fieldname: params[:fieldname]})}
   end
 
   # Create a new asset
@@ -22,25 +22,26 @@ class Assetable::AssetsController < ActionController::Base
       @asset = Document.new(asset_params)
     end
 
-    # Return
+    # # Return
     if @asset.errors.empty? and @asset.save
-      render json: { success: true, html: render_to_string(partial: "assetable/assets/asset", locals: { asset: @asset, fieldname: params[:fieldname]})}
+      @fieldname = params[:fieldname]
+      @uploader_id = params[:uploader_id]
+      render :create
     else
-      render json: { status: "error", errors: @asset.errors }
+      render :error
     end
   end
 
+  # Edit an asset will return the edit form
   def edit
     @asset = Asset.find(params[:id])
   end
 
+  # Update an asset
   def update
     @asset = Asset.find(params[:id])
-    if @asset and @asset.errors.empty? and @asset.update_attributes(permitted_params)
-      render json: { success: true, id: @asset.id, html: render_to_string(partial: "assetable/assets/asset", locals: { asset: @asset, fieldname: params[:fieldname]})}
-    else
-      render json: { status: "error", errors: @external_service.errors.full_messages, html: render_to_string(:edit) }
-    end
+    @asset.update_attributes(permitted_params)
+    @fieldname = params[:fieldname]
   end
 
   # Permitted params for the model
@@ -52,7 +53,8 @@ class Assetable::AssetsController < ActionController::Base
       :content_type,
       :width,
       :height,
-      :asset_type
+      :asset_type,
+      :ratio
     )
   end
 
