@@ -1,17 +1,29 @@
-.uploader-preview.ui-selected
-  background-color: $droppable-bg
-  box-shadow: inset 0 0 0 3px $brand-primary
-  position: relative
+.assetable-selectable
+  ul
+    +clearfix
+    margin: 0
+    padding: 0
 
-  &:after
-    background-color: $brand-primary
-    color: white
-    content: "✓"
-    font-weight: bold
-    right: 0
-    padding: 8px 12px
-    position: absolute
-    top: 0
+  li
+    float: left
+    list-style: none
+    margin: 0
+    padding: 0
+
+  li.ui-selected
+    background-color: $droppable-bg
+    box-shadow: inset 0 0 0 3px $brand-primary
+    position: relative
+
+    &:after
+      background-color: $brand-primary
+      color: white
+      content: "✓"
+      font-weight: bold
+      right: 0
+      padding: 8px 12px
+      position: absolute
+      top: 0
 
 
 

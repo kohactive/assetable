@@ -6,9 +6,13 @@ class Assetable::AssetsController < ActionController::Base
     @assets = Asset.page(params[:page]).per(20)
     @fieldname = params[:fieldname]
     @uploader_id = params[:uploader_id]
-    puts "fieldname:: #{@fieldname}"
-    puts "uploader_id:: #{@uploader_id}"
-    # render json: { success: true, html: render_to_string(partial: "assetable/assets/gallery", locals: {assets: @assets, fieldname: params[:fieldname]})}
+  end
+
+  # Insert assets into a gallery or uploader
+  def insert
+    @fieldname = params[:fieldname]
+    @uploader_id = params[:uploader_id]
+    @assets = Asset.find(params[:asset_ids])
   end
 
   # Create a new asset

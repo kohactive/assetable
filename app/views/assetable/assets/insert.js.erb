@@ -1,0 +1,9 @@
+var uploader = $('#<%= @uploader_id %>');
+
+if (uploader.hasClass("gallery-uploader")) {
+  $('#<%= @uploader_id %>').find('.uploader-data-wrapper').append('<%= j render partial: "assetable/assets/asset", collection: @assets, locals: {fieldname: @fieldname} %>');
+} else {
+  $('#<%= @uploader_id %>').find('.uploader-data-wrapper').html('<%= j render partial: "assetable/assets/asset", locals: { asset: @assets.first, fieldname: @fieldname } %>');
+};
+
+$('.assetable-modal-index').modal('hide').remove();
