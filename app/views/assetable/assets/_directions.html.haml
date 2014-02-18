@@ -1,0 +1,8 @@
+.uploader-directions{id: "#{id}-drop-area"}
+  .uploader-directions-image
+  .uploader-directions-copy
+    = link_to "select file", "#", class: "browse-btn", id: "#{id}-browse-btn"
+    or
+    = link_to "add a third party service", Rails.application.routes.url_helpers.new_assetable_external_service_path(fieldname: fieldname, uploader_id: id), remote: true
+    or
+    = link_to "select from gallery", Rails.application.routes.url_helpers.assetable_assets_path(fieldname: fieldname, uploader_id: id), remote: true

@@ -1,14 +1,18 @@
-console.log("uploader_id:: <%= @uploader_id %>");
-console.log("uploader_id:: <%= @fieldname %>");
 $('<%= j render partial: "table", locals: { assets: @assets, fieldname: @fieldname, uploader_id: @uploader_id } %>').modal();
+
 $( ".assetable-selectable" ).selectable({
-  filter: '.uploader-preview',
-  stop: function() {
-    selected_items = []
-    $(".ui-selected", this).each(function() {
-      var index = $(this).attr('data-asset-id');
-      selected_items.push(index);
+  filter: 'li',
+
+  selected: function(event,ui) {
+    $( ".ui-selected", this ).each(function(a,b) {
+      $('input[type="checkbox"]',b).attr('checked',true);
     });
-    console.log("selected_items:: ", selected_items);
+  },
+
+  unselected: function(event,ui) {
+    $('input[type="checkbox"]',this).attr('checked',false);
+    $( ".ui-selected", this ).each(function(a,b) {
+      $('input[type="checkbox"]',b).attr('checked',true);
+    });
   }
 });

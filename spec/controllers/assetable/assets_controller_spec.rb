@@ -2,12 +2,14 @@ require 'spec_helper'
 
 describe Assetable::AssetsController do
 
+  render_views
+
   describe "POST #create" do
     
-    context "JSON" do
-      it "should respond with JSON" do
+    context "JS" do
+      it "should respond with JS" do
         @image = FactoryGirl.attributes_for(:image_web)
-        post :create, @image
+        xhr :post, :create, @image
         response.should be_success
       end
 
@@ -17,7 +19,7 @@ describe Assetable::AssetsController do
         end
         
         it "should respond with success" do
-          post :create, @document
+          xhr :post, :create, @document
           response.should be_success
         end
       end
