@@ -4,6 +4,10 @@ class Assetable::AssetsController < ActionController::Base
 
   def index
     @assets = Asset.page(params[:page]).per(20)
+    @fieldname = params[:fieldname]
+    @uploader_id = params[:uploader_id]
+    puts "fieldname:: #{@fieldname}"
+    puts "uploader_id:: #{@uploader_id}"
     # render json: { success: true, html: render_to_string(partial: "assetable/assets/gallery", locals: {assets: @assets, fieldname: params[:fieldname]})}
   end
 
@@ -22,7 +26,7 @@ class Assetable::AssetsController < ActionController::Base
       @asset = Document.new(asset_params)
     end
 
-    # # Return
+    # Return
     if @asset.errors.empty? and @asset.save
       @fieldname = params[:fieldname]
       @uploader_id = params[:uploader_id]

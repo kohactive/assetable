@@ -18,6 +18,6 @@
     %span.uploader-size= number_to_human_size(asset.file_size)
     .uploader-actions
       = link_to "delete", "#", class: "btn-uploader btn-uploader-remove-asset"
-      = link_to "edit", edit_assetable_asset_path(asset), class: "btn-uploader btn-uploader-edit-asset", remote: true
+      = link_to "edit", Rails.application.routes.url_helpers.edit_assetable_asset_path(asset.id, fieldname: fieldname), class: "btn-uploader btn-uploader-edit-asset", remote: true
 
   = hidden_field_tag(fieldname, asset.id)

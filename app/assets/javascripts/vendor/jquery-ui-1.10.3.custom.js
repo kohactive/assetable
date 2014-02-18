@@ -1,7 +1,7 @@
-/*! jQuery UI - v1.10.3 - 2013-12-03
+/*! jQuery UI - v1.10.4 - 2014-02-17
 * http://jqueryui.com
-* Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.sortable.js
-* Copyright 2013 jQuery Foundation and other contributors; Licensed MIT */
+* Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.selectable.js, jquery.ui.sortable.js
+* Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
 
 (function( $, undefined ) {
 
@@ -12,7 +12,7 @@ var uuid = 0,
 $.ui = $.ui || {};
 
 $.extend( $.ui, {
-	version: "1.10.3",
+	version: "1.10.4",
 
 	keyCode: {
 		BACKSPACE: 8,
@@ -411,7 +411,7 @@ $.widget = function( name, base, prototype ) {
 		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
-		widgetEventPrefix: existingConstructor ? basePrototype.widgetEventPrefix : name
+		widgetEventPrefix: existingConstructor ? (basePrototype.widgetEventPrefix || name) : name
 	}, proxiedPrototype, {
 		constructor: constructor,
 		namespace: namespace,
@@ -620,12 +620,12 @@ $.Widget.prototype = {
 					curOption = curOption[ parts[ i ] ];
 				}
 				key = parts.pop();
-				if ( value === undefined ) {
+				if ( arguments.length === 1 ) {
 					return curOption[ key ] === undefined ? null : curOption[ key ];
 				}
 				curOption[ key ] = value;
 			} else {
-				if ( value === undefined ) {
+				if ( arguments.length === 1 ) {
 					return this.options[ key ] === undefined ? null : this.options[ key ];
 				}
 				options[ key ] = value;
@@ -832,7 +832,7 @@ $( document ).mouseup( function() {
 });
 
 $.widget("ui.mouse", {
-	version: "1.10.3",
+	version: "1.10.4",
 	options: {
 		cancel: "input,textarea,button,select,option",
 		distance: 1,
@@ -982,7 +982,267 @@ $.widget("ui.mouse", {
 })(jQuery);
 (function( $, undefined ) {
 
-/*jshint loopfunc: true */
+$.widget("ui.selectable", $.ui.mouse, {
+	version: "1.10.4",
+	options: {
+		appendTo: "body",
+		autoRefresh: true,
+		distance: 0,
+		filter: "*",
+		tolerance: "touch",
+
+		// callbacks
+		selected: null,
+		selecting: null,
+		start: null,
+		stop: null,
+		unselected: null,
+		unselecting: null
+	},
+	_create: function() {
+		var selectees,
+			that = this;
+
+		this.element.addClass("ui-selectable");
+
+		this.dragged = false;
+
+		// cache selectee children based on filter
+		this.refresh = function() {
+			selectees = $(that.options.filter, that.element[0]);
+			selectees.addClass("ui-selectee");
+			selectees.each(function() {
+				var $this = $(this),
+					pos = $this.offset();
+				$.data(this, "selectable-item", {
+					element: this,
+					$element: $this,
+					left: pos.left,
+					top: pos.top,
+					right: pos.left + $this.outerWidth(),
+					bottom: pos.top + $this.outerHeight(),
+					startselected: false,
+					selected: $this.hasClass("ui-selected"),
+					selecting: $this.hasClass("ui-selecting"),
+					unselecting: $this.hasClass("ui-unselecting")
+				});
+			});
+		};
+		this.refresh();
+
+		this.selectees = selectees.addClass("ui-selectee");
+
+		this._mouseInit();
+
+		this.helper = $("<div class='ui-selectable-helper'></div>");
+	},
+
+	_destroy: function() {
+		this.selectees
+			.removeClass("ui-selectee")
+			.removeData("selectable-item");
+		this.element
+			.removeClass("ui-selectable ui-selectable-disabled");
+		this._mouseDestroy();
+	},
+
+	_mouseStart: function(event) {
+		var that = this,
+			options = this.options;
+
+		this.opos = [event.pageX, event.pageY];
+
+		if (this.options.disabled) {
+			return;
+		}
+
+		this.selectees = $(options.filter, this.element[0]);
+
+		this._trigger("start", event);
+
+		$(options.appendTo).append(this.helper);
+		// position helper (lasso)
+		this.helper.css({
+			"left": event.pageX,
+			"top": event.pageY,
+			"width": 0,
+			"height": 0
+		});
+
+		if (options.autoRefresh) {
+			this.refresh();
+		}
+
+		this.selectees.filter(".ui-selected").each(function() {
+			var selectee = $.data(this, "selectable-item");
+			selectee.startselected = true;
+			if (!event.metaKey && !event.ctrlKey) {
+				selectee.$element.removeClass("ui-selected");
+				selectee.selected = false;
+				selectee.$element.addClass("ui-unselecting");
+				selectee.unselecting = true;
+				// selectable UNSELECTING callback
+				that._trigger("unselecting", event, {
+					unselecting: selectee.element
+				});
+			}
+		});
+
+		$(event.target).parents().addBack().each(function() {
+			var doSelect,
+				selectee = $.data(this, "selectable-item");
+			if (selectee) {
+				doSelect = (!event.metaKey && !event.ctrlKey) || !selectee.$element.hasClass("ui-selected");
+				selectee.$element
+					.removeClass(doSelect ? "ui-unselecting" : "ui-selected")
+					.addClass(doSelect ? "ui-selecting" : "ui-unselecting");
+				selectee.unselecting = !doSelect;
+				selectee.selecting = doSelect;
+				selectee.selected = doSelect;
+				// selectable (UN)SELECTING callback
+				if (doSelect) {
+					that._trigger("selecting", event, {
+						selecting: selectee.element
+					});
+				} else {
+					that._trigger("unselecting", event, {
+						unselecting: selectee.element
+					});
+				}
+				return false;
+			}
+		});
+
+	},
+
+	_mouseDrag: function(event) {
+
+		this.dragged = true;
+
+		if (this.options.disabled) {
+			return;
+		}
+
+		var tmp,
+			that = this,
+			options = this.options,
+			x1 = this.opos[0],
+			y1 = this.opos[1],
+			x2 = event.pageX,
+			y2 = event.pageY;
+
+		if (x1 > x2) { tmp = x2; x2 = x1; x1 = tmp; }
+		if (y1 > y2) { tmp = y2; y2 = y1; y1 = tmp; }
+		this.helper.css({left: x1, top: y1, width: x2-x1, height: y2-y1});
+
+		this.selectees.each(function() {
+			var selectee = $.data(this, "selectable-item"),
+				hit = false;
+
+			//prevent helper from being selected if appendTo: selectable
+			if (!selectee || selectee.element === that.element[0]) {
+				return;
+			}
+
+			if (options.tolerance === "touch") {
+				hit = ( !(selectee.left > x2 || selectee.right < x1 || selectee.top > y2 || selectee.bottom < y1) );
+			} else if (options.tolerance === "fit") {
+				hit = (selectee.left > x1 && selectee.right < x2 && selectee.top > y1 && selectee.bottom < y2);
+			}
+
+			if (hit) {
+				// SELECT
+				if (selectee.selected) {
+					selectee.$element.removeClass("ui-selected");
+					selectee.selected = false;
+				}
+				if (selectee.unselecting) {
+					selectee.$element.removeClass("ui-unselecting");
+					selectee.unselecting = false;
+				}
+				if (!selectee.selecting) {
+					selectee.$element.addClass("ui-selecting");
+					selectee.selecting = true;
+					// selectable SELECTING callback
+					that._trigger("selecting", event, {
+						selecting: selectee.element
+					});
+				}
+			} else {
+				// UNSELECT
+				if (selectee.selecting) {
+					if ((event.metaKey || event.ctrlKey) && selectee.startselected) {
+						selectee.$element.removeClass("ui-selecting");
+						selectee.selecting = false;
+						selectee.$element.addClass("ui-selected");
+						selectee.selected = true;
+					} else {
+						selectee.$element.removeClass("ui-selecting");
+						selectee.selecting = false;
+						if (selectee.startselected) {
+							selectee.$element.addClass("ui-unselecting");
+							selectee.unselecting = true;
+						}
+						// selectable UNSELECTING callback
+						that._trigger("unselecting", event, {
+							unselecting: selectee.element
+						});
+					}
+				}
+				if (selectee.selected) {
+					if (!event.metaKey && !event.ctrlKey && !selectee.startselected) {
+						selectee.$element.removeClass("ui-selected");
+						selectee.selected = false;
+
+						selectee.$element.addClass("ui-unselecting");
+						selectee.unselecting = true;
+						// selectable UNSELECTING callback
+						that._trigger("unselecting", event, {
+							unselecting: selectee.element
+						});
+					}
+				}
+			}
+		});
+
+		return false;
+	},
+
+	_mouseStop: function(event) {
+		var that = this;
+
+		this.dragged = false;
+
+		$(".ui-unselecting", this.element[0]).each(function() {
+			var selectee = $.data(this, "selectable-item");
+			selectee.$element.removeClass("ui-unselecting");
+			selectee.unselecting = false;
+			selectee.startselected = false;
+			that._trigger("unselected", event, {
+				unselected: selectee.element
+			});
+		});
+		$(".ui-selecting", this.element[0]).each(function() {
+			var selectee = $.data(this, "selectable-item");
+			selectee.$element.removeClass("ui-selecting").addClass("ui-selected");
+			selectee.selecting = false;
+			selectee.selected = true;
+			selectee.startselected = true;
+			that._trigger("selected", event, {
+				selected: selectee.element
+			});
+		});
+		this._trigger("stop", event);
+
+		this.helper.remove();
+
+		return false;
+	}
+
+});
+
+})(jQuery);
+(function( $, undefined ) {
 
 function isOverAxis( x, reference, size ) {
 	return ( x > reference ) && ( x < ( reference + size ) );
@@ -993,7 +1253,7 @@ function isFloating(item) {
 }
 
 $.widget("ui.sortable", $.ui.mouse, {
-	version: "1.10.3",
+	version: "1.10.4",
 	widgetEventPrefix: "sort",
 	ready: false,
 	options: {
@@ -1334,12 +1594,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 
 			// Only put the placeholder inside the current Container, skip all
-			// items form other containers. This works because when moving
+			// items from other containers. This works because when moving
 			// an item from one container to another the
 			// currentContainer is switched before the placeholder is moved.
 			//
-			// Without this moving items in "sub-sortables" can cause the placeholder to jitter
-			// beetween the outer and inner container.
+			// Without this, moving items in "sub-sortables" can cause
+			// the placeholder to jitter beetween the outer and inner container.
 			if (item.instance !== this.currentContainer) {
 				continue;
 			}
@@ -1607,10 +1867,11 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		queries.push([$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"), this]);
 
+		function addItems() {
+			items.push( this );
+		}
 		for (i = queries.length - 1; i >= 0; i--){
-			queries[i][0].each(function() {
-				items.push(this);
-			});
+			queries[i][0].each( addItems );
 		}
 
 		return $(items);
@@ -2168,12 +2429,17 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 
 		//Post events to containers
+		function delayEvent( type, instance, container ) {
+			return function( event ) {
+				container._trigger( type, event, instance._uiHash( instance ) );
+			};
+		}
 		for (i = this.containers.length - 1; i >= 0; i--){
-			if(!noPropagation) {
-				delayedTriggers.push((function(c) { return function(event) { c._trigger("deactivate", event, this._uiHash(this)); };  }).call(this, this.containers[i]));
+			if (!noPropagation) {
+				delayedTriggers.push( delayEvent( "deactivate", this, this.containers[ i ] ) );
 			}
 			if(this.containers[i].containerCache.over) {
-				delayedTriggers.push((function(c) { return function(event) { c._trigger("out", event, this._uiHash(this)); };  }).call(this, this.containers[i]));
+				delayedTriggers.push( delayEvent( "out", this, this.containers[ i ] ) );
 				this.containers[i].containerCache.over = 0;
 			}
 		}
