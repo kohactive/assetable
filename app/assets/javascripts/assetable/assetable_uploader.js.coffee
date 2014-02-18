@@ -33,12 +33,8 @@
     bind_uploader = ->
 
       # Create our extra HTML for the copy and queu
-      # upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy">Drag and drop files or <a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">add them manually</a></div></div>'
-      # upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy"><a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">select file</a> or <a href="#" class="btn-open-asset-gallery">open gallery</a></div></div>'
-      upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy"><a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">select file</a> ' + assetable_uploader.options.directions + '</div></div>'
       upload_queue = '<ul class="upload-queue"></ul>'
       # Add to the uploader
-      $(assetable_uploader).append(upload_directions)
       $(assetable_uploader).append(upload_queue)
 
 
@@ -166,25 +162,25 @@
       #   console.log "boom"
 
 
-      # Add a third party service
-      $(assetable_uploader).on "click", ".btn-third-party-service", (e)->
-        e.preventDefault()
-        $.ajax
-          url: $(this).attr('href')
-          data: {fieldname: assetable_uploader.options.fieldname}
-          type: 'GET'
+      # # Add a third party service
+      # $(assetable_uploader).on "click", ".btn-third-party-service", (e)->
+      #   e.preventDefault()
+      #   $.ajax
+      #     url: $(this).attr('href')
+      #     data: {fieldname: assetable_uploader.options.fieldname}
+      #     type: 'GET'
 
-          success: (response)->
-            $response = $(response)
-            $response.modal()
+      #     success: (response)->
+      #       $response = $(response)
+      #       $response.modal()
 
-            $('form#new_external_service').on 'ajax:beforeSend', ()->
-                # console.log "form submitting..."                
+      #       $('form#new_external_service').on 'ajax:beforeSend', ()->
+      #           # console.log "form submitting..."                
 
-            $('form#new_external_service').on 'ajax:success', (data, status, xhr)->
-              if status.success
-                $response.modal('hide').remove()
-                assetable_uploader.options.FileUploaded status
+      #       $('form#new_external_service').on 'ajax:success', (data, status, xhr)->
+      #         if status.success
+      #           $response.modal('hide').remove()
+      #           assetable_uploader.options.FileUploaded status
                 
 
 
@@ -235,3 +231,8 @@ window.Assetable.bind_uploaders = bind_uploaders
 $(document).ready ->
             
   window.Assetable.bind_uploaders()
+
+  # Remove assetable modals on close
+  $(document).on "hidden.bs.modal", ".assetable-modal", ->
+    $(this).remove()
+    return

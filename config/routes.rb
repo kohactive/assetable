@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
   namespace :assetable do
-    resources :assets
+    resources :assets do
+      get :insert, on: :collection
+    end
     resources :external_services
   end
 

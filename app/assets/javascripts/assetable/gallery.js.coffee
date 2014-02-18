@@ -8,15 +8,17 @@ bind_galleries = ->
       $this.removeClass "uploader"
       
       field = $this.attr("data-uploader-input-name")
+      uploader_id = $this.attr('id')
 
       $this.assetable_uploader
         multi_selection: true
         gallery: true
-        url: "/assetable/assets"
+        url: "/assetable/assets.js"
         fieldname: field
+        uploader_id: uploader_id
         authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
         onUploaded: (resp) ->
-          $this.find('.uploader-data-wrapper').append(resp.html)
+          # $this.find('.uploader-data-wrapper').append(resp.html)
         fileRemoved: (button, item) ->
           $(button).closest('.uploader-preview').remove()
         fileUpdated: (resp) ->
