@@ -1,7 +1,7 @@
-.assetable-assets.assetable-modal.modal.fade
+.assetable-assets.assetable-modal.modal.fade.assetable-modal-edit-asset
   .modal-dialog
     .modal-content
-      = form_for [:assetable, @asset], url: assetable_asset_path(@asset, asset_type: @asset.type), remote: true, html: {class: "form-edit-asset"} do |f|
+      = form_for [:assetable, asset], url: assetable_asset_path(asset, asset_type: asset.type), remote: true, html: {class: "form-edit-asset"} do |f|
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
           %h4.modal-title Asset

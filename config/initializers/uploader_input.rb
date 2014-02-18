@@ -30,7 +30,7 @@ class ActionView::Helpers::FormBuilder
     uploader_html = content_tag(:div, (asset_preview), class: "uploader-data-wrapper")
 
     # Create and return the uploader html
-    uploader_wrapper = content_tag(:div, uploader_html, class: "uploader #{'uploader-has-asset' if asset} #{options[:class]}", id: options[:id], :'data-uploader-input-name' => fieldname, :'data-uploader-directions' => get_directions(options), :'data-max-file-size' => get_max_file_size(options))
+    uploader_wrapper = content_tag(:div, uploader_html, class: "uploader #{'uploader-has-asset' if asset} #{options[:class]}", id: "uploader_#{options[:id]}", :'data-uploader-input-name' => fieldname, :'data-uploader-directions' => get_directions(options), :'data-max-file-size' => get_max_file_size(options))
     return uploader_wrapper
   end
 
@@ -40,7 +40,7 @@ class ActionView::Helpers::FormBuilder
     image_tag = asset_preview_image(asset)
     asset_name = content_tag(:span, asset.name.to_s, class: "uploader-name")
     asset_size = content_tag(:span, number_to_human_size(asset.file_size.to_s), class: "uploader-size")
-    asset_size_and_actions = content_tag(:div, (asset_size + asset_actions(asset)), class: "uploader-size-and-actions")
+    asset_size_and_actions = content_tag(:div, (asset_size + asset_actions(asset, fieldname)), class: "uploader-size-and-actions")
     field = hidden_field_tag(fieldname, (asset.id))
     return content_tag(:div, (image_tag + asset_name + asset_size_and_actions + field), class: "uploader-preview", :'data-asset-id' => asset.id)
   end
@@ -65,9 +65,9 @@ class ActionView::Helpers::FormBuilder
   end
 
   # Asset actions, i.e.e remove and edit buttons
-  def asset_actions asset
+  def asset_actions asset, fieldname
     remove_btn = link_to "delete", "#", class: "btn-uploader btn-uploader-remove-asset"
-    edit_btn = link_to "edit", Rails.application.routes.url_helpers.edit_assetable_asset_path(asset), class: "btn-uploader btn-uploader-edit-asset", :'data-asset-id' => asset.id
+    edit_btn = link_to "edit", Rails.application.routes.url_helpers.edit_assetable_asset_path(asset, fieldname: fieldname), class: "btn-uploader btn-uploader-edit-asset", :'data-asset-id' => asset.id, remote: true
     content_tag(:div, (remove_btn + edit_btn), class: "uploader-actions")
   end
 
