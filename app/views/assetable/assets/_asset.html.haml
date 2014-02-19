@@ -1,17 +1,6 @@
 .uploader-preview{:'data-asset-id' => asset.id}
   
-  = link_to asset.filename.to_s, target: "_blank" do
-    - if asset.image?
-      = image_tag asset.filename.preview.to_s, class: "uploader-preview"
-    - elsif asset.document?
-      = image_tag "assetable/icons/icon-#{asset.extension}.png", class: "uploader-preview"
-    - elsif asset.video?
-      = image_tag "assetable/icons/icon-mp4.png", class: "uploader-preview"
-    - elsif asset.external_service?
-      - if asset.has_icon?
-        = image_tag "assetable/icons/#{asset.icon}", class: "uploader-preview"
-      - else
-        = image_tag "assetable/icons/icon-document.png", class: "uploader-preview"
+  = asset_preview(asset)
   
   %span.uploader-name= asset.name
   .uploader-size-and-actions
