@@ -1,4 +1,3 @@
-require "acts_as_list"
 require "carrierwave"
 require "fog"
 require "kaminari"
