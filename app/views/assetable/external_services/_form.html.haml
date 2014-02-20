@@ -1,13 +1,14 @@
 .assetable-external-services.assetable-modal.modal.fade
   .modal-dialog
     .modal-content
-      = form_for [:assetable, @external_service], remote: true do |f|
+      = form_for [:assetable, external_service], remote: true do |f|
         .modal-header
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
           %h4.modal-title Third Party Service
         .modal-body
           
-          = hidden_field_tag :fieldname, params[:fieldname]
+          = hidden_field_tag :fieldname, fieldname
+          = hidden_field_tag :uploader_id, uploader_id
 
           .form-group
             = f.label :name

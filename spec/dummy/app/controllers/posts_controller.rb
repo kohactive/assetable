@@ -38,11 +38,24 @@ class PostsController < ApplicationController
       params.require(:post).permit(
         :title,
         :body,
+        :balls,
         image_association_attributes: [:asset_id],
         hero_image_association_attributes: [:asset_id],
-        gallery_attributes: [ :id, asset_ids: [] ],
-        hadouken_attributes: [ :id, asset_ids: [] ],
-        sections_attributes: [ :id, :title, image_association_attributes: [:asset_id],  gallery_attributes: [ :id, asset_ids: [] ] ]
+        gallery_attributes: [
+          :id,
+          asset_attachments_attributes: [:id, :asset_id, :_destroy, :sort_order, :name]
+        ],
+        hadouken_attributes: [
+          :id,
+          asset_attachments_attributes: [:id, :asset_id, :_destroy, :sort_order, :name]
+        ],
+        sections_attributes: [
+          :id, :title, image_association_attributes: [:asset_id],
+          gallery_attributes: [
+            :id,
+            asset_attachments_attributes: [:id, :asset_id, :_destroy, :sort_order, :name]
+          ],
+        ]
       )
     end
 

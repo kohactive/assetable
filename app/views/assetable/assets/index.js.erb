@@ -1,0 +1,18 @@
+$('<%= j render partial: "table", locals: { assets: @assets, fieldname: @fieldname, uploader_id: @uploader_id } %>').modal();
+
+$( ".assetable-selectable" ).selectable({
+  filter: 'li',
+
+  selected: function(event,ui) {
+    $( ".ui-selected", this ).each(function(a,b) {
+      $('input[type="checkbox"]',b).attr('checked',true);
+    });
+  },
+
+  unselected: function(event,ui) {
+    $('input[type="checkbox"]',this).attr('checked',false);
+    $( ".ui-selected", this ).each(function(a,b) {
+      $('input[type="checkbox"]',b).attr('checked',true);
+    });
+  }
+});

@@ -19,37 +19,47 @@
       max_file_count: 0
       unique_names: true
       url: null
+      uploader_id: null
     
     assetable_uploader = this
 
     init = ->
       # merge the options with the defaults
       assetable_uploader.options = jQuery.extend({}, defaults, options)
-      assetable_uploader.id = assetable_uploader.attr('id')
+      
+      hidden_field = $(assetable_uploader).find('input[type="hidden"].assetable-uploader-input')
+      assetable_uploader.options.fieldname = hidden_field.attr('name')
+      assetable_uploader.options.uploader_id = hidden_field.attr('id')
+      $(hidden_field, assetable_uploader).remove() if assetable_uploader.options.gallery
+
+      $(assetable_uploader).attr('id', assetable_uploader.options.uploader_id)
+      $(assetable_uploader).find('.browse-btn').attr('id', "#{assetable_uploader.options.uploader_id}-browse-btn")
+      $(assetable_uploader).find('.drop-element').attr('id', "#{assetable_uploader.options.uploader_id}-drop-element")
+      
+      # Add parameters to third party button
+      third_party_btn = $(assetable_uploader).find('.btn-third-party')
+      $(third_party_btn).attr('href', $(third_party_btn).attr('href') + "?fieldname=#{assetable_uploader.options.fieldname}&uploader_id=#{assetable_uploader.options.uploader_id}")
+
       bind_uploader()
 
     
     bind_uploader = ->
 
       # Create our extra HTML for the copy and queu
-      # upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy">Drag and drop files or <a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">add them manually</a></div></div>'
-      # upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy"><a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">select file</a> or <a href="#" class="btn-open-asset-gallery">open gallery</a></div></div>'
-      upload_directions = '<div class="uploader-directions" id="' + assetable_uploader.id + '-drop-area"><div class="uploader-directions-image"></div><div class="uploader-directions-copy"><a href="#" class="browse-btn" id="' + assetable_uploader.id + '-browse-btn">select file</a> ' + assetable_uploader.options.directions + '</div></div>'
       upload_queue = '<ul class="upload-queue"></ul>'
       # Add to the uploader
-      $(assetable_uploader).append(upload_directions)
       $(assetable_uploader).append(upload_queue)
 
 
       # Instantiate the uploader
       uploader = new plupload.Uploader(
         runtimes: "html5"
-        browse_button: "#{assetable_uploader.id}-browse-btn"
+        browse_button: "#{assetable_uploader.options.uploader_id}-browse-btn"
         url: assetable_uploader.options.url
         max_file_size: assetable_uploader.options.max_file_size
         unique_names: assetable_uploader.options.unique_names
         dragdrop: assetable_uploader.options.drag_drop
-        drop_element: assetable_uploader.id
+        drop_element: assetable_uploader.options.uploader_id
         multiple_queues: assetable_uploader.options.multiple_queues
         multi_selection: assetable_uploader.options.multi_selection
         max_file_count: assetable_uploader.options.max_file_count
@@ -57,26 +67,25 @@
         multipart_params:
           authenticity_token: assetable_uploader.options.authenticity_token
           fieldname: assetable_uploader.options.fieldname
+          gallery: assetable_uploader.options.gallery
+          uploader_id: assetable_uploader.options.uploader_id
 
         # Filter file types
-        # filter: [
-        #   title: "Image files"
-        #   extensions: "jpg,gif,png"
-        # ,
-        #   title: "Video files"
-        #   extensions: "mov,mp4,mpeg4"
-        # ]
+        filters:
+          mime_types : [
+            title: "Image files"
+            extensions: "jpg,gif,png"
+          ,
+            title: "Video files"
+            extensions: "mov,mp4,mpeg4"
+          ,
+            title: "Zip Files"
+            extensions: "zip"
+          ]
+          max_file_size: assetable_uploader.options.max_file_size
+          prevent_duplicates: true
       )  
       
-      
-  
-      # # Uploader Template
-      # template = "<div class=\"current_preview current_" + uploader_id + "\">" + content + "</div>" + "<div class=\"koh_pluploader\" id=\"" + uploader_id + "_drop_area\">" + "<a id=\"" + uploader_id + "_browse_btn\" href=\"#\"><span class=\"link_color\">Attach files by dragging & dropping them here</span> or add them manually</a>" + "<ul class=\"upload_queue\"></ul>" + "</div>" + ((if allow_select_mg then "<a href=\"#\" class=\"attach_image\" uid=\"" + uploader_id + "\" target=\"" + container + "\">select from media gallery</a>" else ""))
-      
-      # # Initialize binding
-      # uploader.bind "Init", (up, params) ->
-      #   $("#" + container).html template
-
       
       # # Initiate the uploader
       uploader.init()
@@ -94,9 +103,7 @@
       
       # Listen for upload complete
       uploader.bind "FileUploaded", (up, file, info) ->
-        if assetable_uploader.options.FileUploaded
-          json = jQuery.parseJSON(info.response)
-          assetable_uploader.options.FileUploaded json
+        eval(info.response)
         $("li#" + file.id, assetable_uploader).fadeOut().remove()
 
       
@@ -104,10 +111,11 @@
       uploader.bind "QueueChanged", (up, files) ->
         uploader.start()
         up.refresh()
+      
       # # Listen for errors
-      # uploader.bind "Error", (up, err) ->
-      #   $("#" + container).append "<div class=\"notice error\">" + "<span class=\"block\">Error: " + err.code + "</div>" + "<span class=\"block\">Message: " + err.message + "</div>" + ((if err.file then "<span clas=\"block\">" + err.file.name + "</span>" else "")) + "</div>"
-      #   up.refresh() # Reposition Flash/Silverlight
+      uploader.bind "Error", (up, err) ->
+        
+
 
       draggable_selector = (if assetable_uploader.options.gallery then $('.uploader-directions', assetable_uploader) else $(assetable_uploader))
 
@@ -132,27 +140,8 @@
       $(assetable_uploader).on "click", ".btn-uploader-remove-asset", (e)->
         e.preventDefault()
         if assetable_uploader.options.fileRemoved
-          assetable_uploader.options.fileRemoved this, assetable_uploader
+          assetable_uploader.options.fileRemoved assetable_uploader, this
 
-
-      $(assetable_uploader).on "click", ".btn-uploader-edit-asset", (e)->
-        e.preventDefault()
-        $.ajax
-          url: $(this).attr('href')
-          data: {fieldname: assetable_uploader.options.fieldname}
-          type: 'GET'
-
-          success: (response)->
-            $response = $(response)
-            $response.modal()
-
-            $('form.form-edit-asset').on 'ajax:beforeSend', ()->
-                # console.log "form submitting..."                
-
-            $('form.form-edit-asset').on 'ajax:success', (data, status, xhr)->
-              if status.success
-                $response.modal('hide').remove()
-                assetable_uploader.options.fileUpdated status
 
 
       $(assetable_uploader).on "click", ".btn-open-asset-gallery", (e)->
@@ -161,75 +150,8 @@
         # if assetable_uploader.options.openAssetGallery
         #   assetable_uploader.options.openAssetGallery this, assetable_uploader
       
-      # $(assetable_uploader).on "click", ".btn-third-party-service", (e)->
-      #   e.preventDefault()
-      #   console.log "boom"
-
-
-      # Add a third party service
-      $(assetable_uploader).on "click", ".btn-third-party-service", (e)->
-        e.preventDefault()
-        $.ajax
-          url: $(this).attr('href')
-          data: {fieldname: assetable_uploader.options.fieldname}
-          type: 'GET'
-
-          success: (response)->
-            $response = $(response)
-            $response.modal()
-
-            $('form#new_external_service').on 'ajax:beforeSend', ()->
-                # console.log "form submitting..."                
-
-            $('form#new_external_service').on 'ajax:success', (data, status, xhr)->
-              if status.success
-                $response.modal('hide').remove()
-                assetable_uploader.options.FileUploaded status
-                
-
-
-
+    
 
     init()
 
 ) jQuery
-
-
-
-
-bind_uploaders = ->
-  # Bind the koh uploader and galleries to a page
-  $(".uploader").each ->
-    # Check that it's not already bound
-    unless $(this).hasClass("uploadable")
-      $(this).addClass "uploadable"
-      $this = $(this)
-      $this.removeClass "uploader"
-      
-      field = $this.attr("data-uploader-input-name")
-
-      $this.assetable_uploader
-        multi_selection: false
-        url: "/assetable/assets"
-        fieldname: field
-        directions: $this.attr('data-uploader-directions')
-        max_file_size: $this.attr("data-max-file-size")
-        authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
-        onUploaded: (resp) ->
-          $this.find('.uploader-data-wrapper').html(resp.html)
-          $this.addClass("uploader-has-asset")
-        fileRemoved: (button, item) ->
-          return false unless $(item).hasClass("uploader-has-asset")
-          $('.uploader-preview', item).html('<input type="hidden" name="' + field + '" />')
-          $(item).removeClass("uploader-has-asset")
-        fileUpdated: (resp) ->
-          $this.find('div.uploader-preview[data-asset-id="' + resp.id + '"]').replaceWith(resp.html)
-        # openAssetGallery: (button, item) ->
-
-
-
-window.Assetable.bind_uploaders = bind_uploaders
-
-$(document).ready ->
-            
-  window.Assetable.bind_uploaders()

@@ -1,0 +1,42 @@
+- if asset.present?
+  .uploader-preview{:'data-asset-id' => asset.id}
+    .uploader-asset-details
+      = link_to asset.filename.to_s, target: "_blank" do
+        - if asset.image?
+          = image_tag asset.filename.preview.to_s, class: "uploader-preview"
+        - elsif asset.document?
+          = image_tag "assetable/icons/icon-#{asset.extension}.png", class: "uploader-preview"
+        - elsif asset.video?
+          = image_tag "assetable/icons/icon-mp4.png", class: "uploader-preview"
+        - elsif asset.external_service?
+          - if asset.has_icon?
+            = image_tag "assetable/icons/#{asset.icon}", class: "uploader-preview"
+          - else
+            = image_tag "assetable/icons/icon-document.png", class: "uploader-preview"
+      
+      %span.uploader-name= asset.name
+      .uploader-size-and-actions
+        %span.uploader-size= number_to_human_size(asset.file_size)
+
+        .uploader-actions
+          = link_to "delete", "#", class: "btn-uploader btn-uploader-remove-asset"
+          = link_to "edit", Rails.application.routes.url_helpers.edit_assetable_asset_path(asset.id), class: "btn-uploader btn-uploader-edit-asset", remote: true      
+  
+    - if local_assigns.has_key? :fieldname
+
+      - assetable_index = local_assigns.has_key?(:index) ? index : Time.now.to_i 
+      - if local_assigns.has_key? :asset_attachment
+        - asset_attachment_id = asset_attachment.id
+        - asset_attachment_sort_order = asset_attachment.sort_order
+      - else
+        - asset_attachment_id = nil
+        - asset_attachment_sort_order = nil
+
+      / - id = asset_attachment.id.present? ? asset_attachment.id : Time.now.to_i
+      = hidden_field_tag("#{fieldname}[#{assetable_index}][id]", asset_attachment_id, id: nil)
+      = hidden_field_tag("#{fieldname}[#{assetable_index}][sort_order]", asset_attachment_sort_order, class: "assetable-gallery-item-sort-order")
+      = hidden_field_tag("#{fieldname}[#{assetable_index}][asset_id]", asset.id)
+      = hidden_field_tag("#{fieldname}[#{assetable_index}][_destroy]", "0", class: "assetable-gallery-item-remove")
+
+- else
+  .uploader-preview

@@ -1,6 +1,6 @@
 class Assetable::ExternalServicesController < ActionController::Base
 
-  respond_to :html, :json
+  respond_to :html, :js
 
   # def index
   #   @assets = Asset.page(params[:page]).per(20)
@@ -10,6 +10,8 @@ class Assetable::ExternalServicesController < ActionController::Base
   # New template
   def new
     @external_service = ExternalService.new
+    @fieldname = params[:fieldname]
+    @uploader_id = params[:uploader_id]
   end
 
   # Create a new external service asset
@@ -17,10 +19,11 @@ class Assetable::ExternalServicesController < ActionController::Base
     @external_service = ExternalService.new(permitted_params)
 
     if @external_service.errors.empty? and @external_service.save
-      render json: { success: true, html: render_to_string(partial: "assetable/assets/asset", locals: { asset: @external_service, fieldname: params[:fieldname]})}
+      @fieldname = params[:fieldname]
+      @uploader_id = params[:uploader_id]
+      render :create
     else
-      puts "errors:: #{@external_service.errors.full_messages}"
-      render json: { status: "error", errors: @external_service.errors.full_messages, html: render_to_string(:new) }
+      render :error
     end
   end
 
@@ -32,7 +35,8 @@ class Assetable::ExternalServicesController < ActionController::Base
       :body,
       :content_type,
       :width,
-      :height
+      :height,
+      :uploader_id
     )
   end
 

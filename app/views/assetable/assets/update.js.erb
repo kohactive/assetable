@@ -1,0 +1,2 @@
+$('div.uploader-preview[data-asset-id="<%= @asset.id %>"]').find('.uploader-asset-details').replaceWith('<%= j render partial: "assetable/shared/asset_preview", locals: {asset: @asset} %>');
+$('.assetable-modal-edit-asset').modal('hide').remove();

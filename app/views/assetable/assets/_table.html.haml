@@ -1,0 +1,22 @@
+.assetable-assets.assetable-modal.modal.fade.assetable-modal-index
+  .modal-dialog
+    = form_tag insert_assetable_assets_path, remote: true do |f|
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+          %h4.modal-title Asset Gallery
+        .modal-body.clearfix
+          
+          = hidden_field_tag :fieldname, fieldname
+          = hidden_field_tag :uploader_id, uploader_id
+          
+          .assetable-selectable
+            %ul
+              - assets.each do |asset|
+                %li
+                  = render partial: "asset", locals: {asset: asset}
+                  = check_box_tag 'asset_ids[]', asset.id, false, id: "asset_id_#{asset.id}", style: 'visibility: hidden'
+
+        .modal-footer
+          = button_tag "Cancel", class: "btn btn-default", :'data-dismiss' => "modal", type: "button"
+          = button_tag "Insert", type: :submit, class: "btn btn-primary"

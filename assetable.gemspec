@@ -27,14 +27,16 @@ Gem::Specification.new do |s|
   s.add_development_dependency "guard-spork"
   s.add_development_dependency "sqlite3"
 
+  s.add_dependency 'acts_as_list'
   s.add_dependency 'carrierwave'
   s.add_dependency 'fog'
+  s.add_dependency 'kaminari'
   s.add_dependency 'rmagick', '~> 2.13.2'
   s.add_dependency 'plupload-rails'
-  s.add_dependency 'kaminari'
+  s.add_dependency 'simple_form'
 
-  s.add_dependency 'haml-rails'
-  s.add_dependency 'sass-rails'
   s.add_dependency 'coffee-rails'
+  s.add_dependency 'haml-rails'
   s.add_dependency 'jquery-rails'
+  s.add_dependency 'sass-rails'
 end

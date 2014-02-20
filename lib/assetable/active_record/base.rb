@@ -1,5 +1,5 @@
 module Assetable
-  module Core
+  module Base
     extend ActiveSupport::Concern
     
     included do
@@ -38,4 +38,4 @@ module Assetable
   end
 end
 
-ActiveRecord::Base.send :include, Assetable::Core
+ActiveRecord::Base.send :include, Assetable::Base
