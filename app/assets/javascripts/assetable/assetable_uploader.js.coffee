@@ -27,10 +27,10 @@
       # merge the options with the defaults
       assetable_uploader.options = jQuery.extend({}, defaults, options)
       
-      console.log "this:: ", assetable_uploader
       hidden_field = $(assetable_uploader).find('input[type="hidden"].assetable-uploader-input')
       assetable_uploader.options.fieldname = hidden_field.attr('name')
       assetable_uploader.options.uploader_id = hidden_field.attr('id')
+      $(hidden_field, assetable_uploader).remove() if assetable_uploader.options.gallery
 
       $(assetable_uploader).attr('id', assetable_uploader.options.uploader_id)
       $(assetable_uploader).find('.browse-btn').attr('id', "#{assetable_uploader.options.uploader_id}-browse-btn")
@@ -39,11 +39,6 @@
       # Add parameters to third party button
       third_party_btn = $(assetable_uploader).find('.btn-third-party')
       $(third_party_btn).attr('href', $(third_party_btn).attr('href') + "?fieldname=#{assetable_uploader.options.fieldname}&uploader_id=#{assetable_uploader.options.uploader_id}")
-
-
-      console.log "hidden_field:: ", hidden_field
-      console.log "field:: ", assetable_uploader.options.fieldname
-      console.log "uploader_id:: ", assetable_uploader.options.uploader_id
 
       bind_uploader()
 
@@ -72,6 +67,7 @@
         multipart_params:
           authenticity_token: assetable_uploader.options.authenticity_token
           fieldname: assetable_uploader.options.fieldname
+          gallery: assetable_uploader.options.gallery
           uploader_id: assetable_uploader.options.uploader_id
 
         # Filter file types
@@ -125,7 +121,6 @@
 
       # Handle the drag over effect, adds a class to the container
       $(draggable_selector).bind "dragover", ->
-        console.log 'dragging...'
         $(this).addClass "droppable" unless $(this).hasClass("droppable")
 
       # Handles drag leave 
@@ -144,9 +139,8 @@
       # Remove asset link handler
       $(assetable_uploader).on "click", ".btn-uploader-remove-asset", (e)->
         e.preventDefault()
-        $(this).parentsUntil('.uploader-preview').parent().remove();
         if assetable_uploader.options.fileRemoved
-          assetable_uploader.options.fileRemoved this, assetable_uploader
+          assetable_uploader.options.fileRemoved assetable_uploader, this
 
 
 

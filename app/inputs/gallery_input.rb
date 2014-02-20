@@ -4,7 +4,7 @@ class GalleryInput < SimpleForm::Inputs::FileInput
 
   def input
     # TODO:: Find a better way to do this
-    fieldname = "#{object_name}[#{attribute_name}_attributes][asset_ids][]"
+    fieldname = "#{object_name}[#{attribute_name}_attributes][asset_attachments_attributes]"
 
     # This is the hidden input that identifies which gallery we are saving
     # otherwise it will create a new gallery each time.

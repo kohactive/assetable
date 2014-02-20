@@ -1,19 +1,5 @@
 bind_galleries = ->
 
-  # $('.assetable-uploader').each ->
-  #   unless $(this).hasClass("uploadable")
-  #     $(this).addClass "uploadable"
-  #     $this = $(this)
-  #     $this.removeClass "assetable-uploader"
-
-  #     $this.assetable_uploader
-  #       multi_selection: false
-  #       url: "/assetable/assets.js"
-  #       # directions: $this.attr('data-uploader-directions')
-  #       # max_file_size: $this.attr("data-max-file-size")
-  #       authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
-
-
   # Bind the koh uploader and galleries to a page
   $(".gallery-uploader").each ->
     # Check that it's not already bound
@@ -21,23 +7,16 @@ bind_galleries = ->
       $(this).addClass "uploadable"
       $this = $(this)
       $this.removeClass "uploader"
-      
-      # field = $this.attr("data-uploader-input-name")
-      # uploader_id = $this.attr('id')
 
       $this.assetable_uploader
         multi_selection: true
         gallery: true
         url: "/assetable/assets.js"
-        # fieldname: field
-        # uploader_id: uploader_id
         authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
-        # onUploaded: (resp) ->
-        #   # $this.find('.uploader-data-wrapper').append(resp.html)
-        # fileRemoved: (button, item) ->
-        #   $(button).closest('.uploader-preview').remove()
-        # fileUpdated: (resp) ->
-        #   $this.find('div.uploader-preview[data-asset-id="' + resp.id + '"]').replaceWith(resp.html)
+        fileRemoved: (item, button) ->
+          $(button).parentsUntil('.uploader-preview').parent().find('.assetable-gallery-item-remove').val('1')
+          $(button).parentsUntil('.uploader-preview').parent().fadeOut()
+
 
         # Make the gallery sortable
         $(this).sortable
@@ -45,6 +24,11 @@ bind_galleries = ->
           distance: 50
           tolerance: 'pointer'
           placeholder: 'uploader-sortable-placeholder'
+          update: (event, ui) ->
+            $gallery = $(this)
+
+            $('input.assetable-gallery-item-sort-order', $gallery).each (index) ->
+              $(this).val(index)
 
 
 window.Assetable.bind_galleries = bind_galleries
