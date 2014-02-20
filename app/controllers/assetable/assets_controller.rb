@@ -49,7 +49,6 @@ class Assetable::AssetsController < ActionController::Base
   def update
     @asset = Asset.find(params[:id])
     @asset.update_attributes(permitted_params)
-    @fieldname = params[:fieldname]
   end
 
   # Permitted params for the model

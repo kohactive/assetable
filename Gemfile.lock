@@ -12,6 +12,7 @@ PATH
       rails (~> 4.0.0)
       rmagick (~> 2.13.2)
       sass-rails
+      simple_form
 
 GEM
   remote: https://rubygems.org/
@@ -185,6 +186,9 @@ GEM
       sprockets-rails (~> 2.0.0)
     shoulda-matchers (2.5.0)
       activesupport (>= 3.0.0)
+    simple_form (3.0.1)
+      actionpack (>= 4.0.0, < 4.1)
+      activemodel (>= 4.0.0, < 4.1)
     slop (3.4.7)
     spork (0.9.2)
     sprockets (2.10.1)

@@ -6,9 +6,7 @@
           %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
           %h4.modal-title Asset
         .modal-body
-          
-          = hidden_field_tag :fieldname, params[:fieldname]
-          
+                    
           .form-group
             = f.label :name
             = f.text_field :name, class: "form-control input-fluid", required: true

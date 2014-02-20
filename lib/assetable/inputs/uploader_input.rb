@@ -15,7 +15,7 @@ class ActionView::Helpers::FormBuilder
     end
 
     # uploaer html with preview and input
-    uploader_html = content_tag(:div, asset_preview.html_safe, class: "uploader-data-wrapper")
+    uploader_html = content_tag(:div, asset_preview.html_safe, class: "uploader-assets-wrapper")
 
     # Create and return the uploader html
     uploader_wrapper = content_tag(:div, (uploader_html + directions_html("uploader_#{options[:id]}", fieldname).html_safe), class: "uploader #{'uploader-has-asset' if asset} #{options[:class]}", id: "uploader_#{options[:id]}", :'data-uploader-input-name' => fieldname, :'data-uploader-directions' => get_directions(options), :'data-max-file-size' => get_max_file_size(options))

@@ -1,32 +1,53 @@
-= form_for @post do |f|
+= simple_form_for @post do |f|
   .row
     = f.label :title
     = f.text_field :title
   .row
     = f.label :body
     = f.text_area :body
-  .row
-    = f.label :image
-    = f.uploader :image, class: "hadouken"
+  / .row
+  /   = f.input :image, class: "hadouken", as: :uploader
 
-  .row
-    = f.label :hero_image
-    = f.uploader :hero_image
+  / .row
+  /   = f.input :hero_image, class: "hadouken", as: :uploader
 
-  .row
-    = f.label :gallery
-    = f.gallery :gallery
+  / = @post.gallery.id
+  = f.input :gallery, as: :gallery
+  / = f.simple_fields_for :gallery do |g|
+  /   / = g.object.assets.inspect
+  /   = g.association :assets, as: :check_boxes
+  /   / = g.simple_fields_for :asset_attachments do |aa|
+  /   /   = aa.input :asset
+  /   / = g.input :asset_ids
+  /   / = g.input :id
+  /   / = g.association :assets, as: :check_boxes
+  /   / = g.association :asset_attachments, as: :check_boxes
+  /   / = g.assets.each do |a|
+  /   /   = a.input :id
+  /   / = g.simple_fields_for :assets_ids do |a|
+  /   /   = a.input :id
 
+  
   .row
-    = f.label :hadouken
-    = f.gallery :hadouken
+    / = f.label :gallery
+    / = f.gallery :gallery
+    / = f.input :gallery, as: :gallery
 
-  .row
-    %h4 Sections
-    = f.fields_for :sections, (f.object.sections.build unless f.object.sections.present?) do |s|
-      = s.text_field :title
-      = s.uploader :image
-      = s.gallery :gallery
+  / .row
+  /   = f.label :hadouken
+  /   = f.gallery :hadouken
+  / hi
+  / = f.simple_fields_for :hadouken_attributes do |g|
+  /   / = g.simple_fields_for :asset_attachments do |aa|
+  /   /   = aa.input :asset
+  /   = g.input :asset_ids
+
+  / .row
+  /   %h4 Sections
+  /   = f.fields_for :sections, (f.object.sections.build unless f.object.sections.present?) do |s|
+  /     = s.text_field :title
+  /     = s.input :image, as: :uploader
+  /     / = s.gallery :gallery
 
   
   = f.submit

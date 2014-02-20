@@ -15,4 +15,4 @@
 //= require jquery
 //= require jquery_ujs
 
-//= require assetable/uploader
+//= require assetable/assetable

@@ -22,6 +22,7 @@ class PostsController < ApplicationController
   end
 
   def update
+    puts "permitted_params:: #{permitted_params}"
     @post = Post.find(params[:id])
     if @post.errors.empty? and @post.update_attributes(permitted_params)
       redirect_to edit_post_path(@post)
@@ -35,9 +36,11 @@ class PostsController < ApplicationController
 
     # Permitted params for an asset
     def permitted_params
+      puts "permitting...."
       params.require(:post).permit(
         :title,
         :body,
+        :balls,
         image_association_attributes: [:asset_id],
         hero_image_association_attributes: [:asset_id],
         gallery_attributes: [ :id, asset_ids: [] ],

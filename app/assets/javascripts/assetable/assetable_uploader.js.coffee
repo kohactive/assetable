@@ -26,7 +26,25 @@
     init = ->
       # merge the options with the defaults
       assetable_uploader.options = jQuery.extend({}, defaults, options)
-      assetable_uploader.id = assetable_uploader.attr('id')
+      
+      console.log "this:: ", assetable_uploader
+      hidden_field = $(assetable_uploader).find('input[type="hidden"].assetable-uploader-input')
+      assetable_uploader.options.fieldname = hidden_field.attr('name')
+      assetable_uploader.options.uploader_id = hidden_field.attr('id')
+
+      $(assetable_uploader).attr('id', assetable_uploader.options.uploader_id)
+      $(assetable_uploader).find('.browse-btn').attr('id', "#{assetable_uploader.options.uploader_id}-browse-btn")
+      $(assetable_uploader).find('.drop-element').attr('id', "#{assetable_uploader.options.uploader_id}-drop-element")
+      
+      # Add parameters to third party button
+      third_party_btn = $(assetable_uploader).find('.btn-third-party')
+      $(third_party_btn).attr('href', $(third_party_btn).attr('href') + "?fieldname=#{assetable_uploader.options.fieldname}&uploader_id=#{assetable_uploader.options.uploader_id}")
+
+
+      console.log "hidden_field:: ", hidden_field
+      console.log "field:: ", assetable_uploader.options.fieldname
+      console.log "uploader_id:: ", assetable_uploader.options.uploader_id
+
       bind_uploader()
 
     
@@ -41,12 +59,12 @@
       # Instantiate the uploader
       uploader = new plupload.Uploader(
         runtimes: "html5"
-        browse_button: "#{assetable_uploader.id}-browse-btn"
+        browse_button: "#{assetable_uploader.options.uploader_id}-browse-btn"
         url: assetable_uploader.options.url
         max_file_size: assetable_uploader.options.max_file_size
         unique_names: assetable_uploader.options.unique_names
         dragdrop: assetable_uploader.options.drag_drop
-        drop_element: assetable_uploader.id
+        drop_element: assetable_uploader.options.uploader_id
         multiple_queues: assetable_uploader.options.multiple_queues
         multi_selection: assetable_uploader.options.multi_selection
         max_file_count: assetable_uploader.options.max_file_count
@@ -89,9 +107,7 @@
       
       # Listen for upload complete
       uploader.bind "FileUploaded", (up, file, info) ->
-        if assetable_uploader.options.FileUploaded
-          eval(info.response)
-          #assetable_uploader.options.FileUploaded json
+        eval(info.response)
         $("li#" + file.id, assetable_uploader).fadeOut().remove()
 
       
@@ -109,6 +125,7 @@
 
       # Handle the drag over effect, adds a class to the container
       $(draggable_selector).bind "dragover", ->
+        console.log 'dragging...'
         $(this).addClass "droppable" unless $(this).hasClass("droppable")
 
       # Handles drag leave 
@@ -127,28 +144,10 @@
       # Remove asset link handler
       $(assetable_uploader).on "click", ".btn-uploader-remove-asset", (e)->
         e.preventDefault()
+        $(this).parentsUntil('.uploader-preview').parent().remove();
         if assetable_uploader.options.fileRemoved
           assetable_uploader.options.fileRemoved this, assetable_uploader
 
-
-      # $(assetable_uploader).on "click", ".btn-uploader-edit-asset", (e)->
-      #   e.preventDefault()
-      #   $.ajax
-      #     url: $(this).attr('href')
-      #     data: {fieldname: assetable_uploader.options.fieldname}
-      #     type: 'GET'
-
-      #     success: (response)->
-      #       $response = $(response)
-      #       $response.modal()
-
-      #       $('form.form-edit-asset').on 'ajax:beforeSend', ()->
-      #           # console.log "form submitting..."                
-
-      #       $('form.form-edit-asset').on 'ajax:success', (data, status, xhr)->
-      #         if status.success
-      #           $response.modal('hide').remove()
-      #           assetable_uploader.options.fileUpdated status
 
 
       $(assetable_uploader).on "click", ".btn-open-asset-gallery", (e)->
@@ -157,82 +156,8 @@
         # if assetable_uploader.options.openAssetGallery
         #   assetable_uploader.options.openAssetGallery this, assetable_uploader
       
-      # $(assetable_uploader).on "click", ".btn-third-party-service", (e)->
-      #   e.preventDefault()
-      #   console.log "boom"
-
-
-      # # Add a third party service
-      # $(assetable_uploader).on "click", ".btn-third-party-service", (e)->
-      #   e.preventDefault()
-      #   $.ajax
-      #     url: $(this).attr('href')
-      #     data: {fieldname: assetable_uploader.options.fieldname}
-      #     type: 'GET'
-
-      #     success: (response)->
-      #       $response = $(response)
-      #       $response.modal()
-
-      #       $('form#new_external_service').on 'ajax:beforeSend', ()->
-      #           # console.log "form submitting..."                
-
-      #       $('form#new_external_service').on 'ajax:success', (data, status, xhr)->
-      #         if status.success
-      #           $response.modal('hide').remove()
-      #           assetable_uploader.options.FileUploaded status
-                
-
-
-
+    
 
     init()
 
 ) jQuery
-
-
-
-
-bind_uploaders = ->
-  # Bind the koh uploader and galleries to a page
-  $(".uploader").each ->
-    # Check that it's not already bound
-    unless $(this).hasClass("uploadable")
-      $(this).addClass "uploadable"
-      $this = $(this)
-      $this.removeClass "uploader"
-      
-      field = $this.attr("data-uploader-input-name")
-      uploader_id = $this.attr('id')
-
-      $this.assetable_uploader
-        multi_selection: false
-        url: "/assetable/assets.js"
-        fieldname: field
-        uploader_id: uploader_id
-        directions: $this.attr('data-uploader-directions')
-        max_file_size: $this.attr("data-max-file-size")
-        authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
-        onUploaded: (resp) ->
-          # $this.find('.uploader-data-wrapper').html(resp.html)
-          # $this.addClass("uploader-has-asset")
-        fileRemoved: (button, item) ->
-          return false unless $(item).hasClass("uploader-has-asset")
-          $('.uploader-preview', item).html('<input type="hidden" name="' + field + '" />')
-          $(item).removeClass("uploader-has-asset")
-        fileUpdated: (resp) ->
-          $this.find('div.uploader-preview[data-asset-id="' + resp.id + '"]').replaceWith(resp.html)
-        # openAssetGallery: (button, item) ->
-
-
-
-window.Assetable.bind_uploaders = bind_uploaders
-
-$(document).ready ->
-            
-  window.Assetable.bind_uploaders()
-
-  # Remove assetable modals on close
-  $(document).on "hidden.bs.modal", ".assetable-modal", ->
-    $(this).remove()
-    return

@@ -1,7 +1,8 @@
 require "carrierwave"
 require "fog"
-require "plupload-rails"
 require "kaminari"
+require "plupload-rails"
+require "simple_form"
 
 require "haml-rails"
 require "sass-rails"
@@ -11,9 +12,7 @@ require "assetable/core"
 require "assetable/engine"
 require "assetable/config"
 
-require "assetable/inputs/form_helper"
-require "assetable/inputs/uploader_input"
-require "assetable/inputs/gallery_input"
+require "assetable/inputs/uploaders"
 
 module Assetable
 

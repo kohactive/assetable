@@ -1,7 +1,3 @@
-/ = asset_preview(asset)
-/ - if local_assigns.has_key? :fieldname
-/     = hidden_field_tag(fieldname, asset.id)
-
 - if asset.present?
   .uploader-preview{:'data-asset-id' => asset.id}
     = link_to asset.filename.to_s, target: "_blank" do
@@ -24,9 +20,6 @@
       .uploader-actions
         = link_to "delete", "#", class: "btn-uploader btn-uploader-remove-asset"
         = link_to "edit", Rails.application.routes.url_helpers.edit_assetable_asset_path(asset.id), class: "btn-uploader btn-uploader-edit-asset", remote: true      
-  
-    - if local_assigns.has_key? :fieldname
-      = hidden_field_tag(fieldname, asset.id, id: nil)
 
 - else
   .uploader-preview
