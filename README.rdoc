@@ -1,6 +1,8 @@
 = Assetable
 
-Easily add Assets to your Active Record models, including images, videos and almost any kind of documents. Includes an uploader, media gallery and much more.
+Easily add Assets to your Rails app, including images, videos and almost any kind of documents. Includes an uploader, media gallery and much more.
+
+This is still an early beta release. While the majority of uploading works, the media gallery selector is still in an early alpha.
 
 === Installation
 
@@ -8,7 +10,7 @@ Easily add Assets to your Active Record models, including images, videos and alm
 
 Add this line to your application's Gemfile:
 
-    gem 'bootstrap_sass_rails'
+    gem 'assetable'
 
 And then execute:
 
@@ -16,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install bootstrap_sass_rails
+    $ gem install assetable
     
     
 ==== Migrations    
@@ -38,7 +40,7 @@ Add the Stylesheet and Javascripts to your project:
     
 Javascript:
 
-    //= import uploader
+    //= require assetable/assetable
 
 
 ==== Configuration
@@ -152,12 +154,12 @@ In order to start uploading assets, you'll need to add the uploader to your form
 
     = form_for @user do |f|
       ...
-      = f.uploader :avatar
+      = f.input :avatar, as: :uploader
       ...
 
     # You can also pass typical params to the uploader
     = form_for @user do |f|
-      = f.uploader :avatar, class: "classname", id: "something-else"
+      = f.inputer :avatar, as: :uploader, input_html: { class: "classname", id: "something-else" }
       
 Make sure the assetable uploader javascript is added.
 
@@ -166,7 +168,7 @@ Make sure the assetable uploader javascript is added.
 
     = form_for @user do |f|
       ...
-      = f.gallery :gallery
+      = f.input :gallery, as: :gallery
       ...
       
 It's that easy!
