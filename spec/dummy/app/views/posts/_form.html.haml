@@ -5,49 +5,20 @@
   .row
     = f.label :body
     = f.text_area :body
-  / .row
-  /   = f.input :image, class: "hadouken", as: :uploader
 
-  / .row
-  /   = f.input :hero_image, class: "hadouken", as: :uploader
+  = f.input :image, class: "hadouken", as: :uploader
+  = f.input :hero_image, class: "hadouken", as: :uploader
 
-  / = @post.gallery.id
   = f.input :gallery, as: :gallery
-  / = f.simple_fields_for :gallery do |g|
-  /   / = g.object.assets.inspect
-  /   = g.association :assets, as: :check_boxes
-  /   / = g.simple_fields_for :asset_attachments do |aa|
-  /   /   = aa.input :asset
-  /   / = g.input :asset_ids
-  /   / = g.input :id
-  /   / = g.association :assets, as: :check_boxes
-  /   / = g.association :asset_attachments, as: :check_boxes
-  /   / = g.assets.each do |a|
-  /   /   = a.input :id
-  /   / = g.simple_fields_for :assets_ids do |a|
-  /   /   = a.input :id
+  = f.input :hadouken, as: :gallery
 
-  
+
   .row
-    / = f.label :gallery
-    / = f.gallery :gallery
-    / = f.input :gallery, as: :gallery
-
-  / .row
-  /   = f.label :hadouken
-  /   = f.gallery :hadouken
-  / hi
-  / = f.simple_fields_for :hadouken_attributes do |g|
-  /   / = g.simple_fields_for :asset_attachments do |aa|
-  /   /   = aa.input :asset
-  /   = g.input :asset_ids
-
-  / .row
-  /   %h4 Sections
-  /   = f.fields_for :sections, (f.object.sections.build unless f.object.sections.present?) do |s|
-  /     = s.text_field :title
-  /     = s.input :image, as: :uploader
-  /     / = s.gallery :gallery
+    %h4 Sections
+    = f.simple_fields_for :sections, (f.object.sections.build unless f.object.sections.present?) do |s|
+      = s.text_field :title
+      = s.input :image, as: :uploader
+      = s.input :gallery, as: :gallery
 
   
   = f.submit
