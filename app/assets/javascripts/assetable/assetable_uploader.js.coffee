@@ -83,7 +83,7 @@
             extensions: "zip"
           ,
             title: "Documents"
-            extensions: "pdf, doc, docx, xls, xlsx"
+            extensions: "pdf,doc,docx,xls,xlsx"
           ]
           max_file_size: assetable_uploader.options.max_file_size
           prevent_duplicates: true
