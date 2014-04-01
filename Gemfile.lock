@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    assetable (0.2.1)
+    assetable (0.2.2)
       carrierwave
       coffee-rails
       fog
