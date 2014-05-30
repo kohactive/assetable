@@ -21,7 +21,7 @@ class Asset < ActiveRecord::Base
   
   before_validation :update_asset_attributes
 
-  validates_uniqueness_of :checksum
+  validates_uniqueness_of :checksum, message: "File has already been uploaded." if Assetable.unique_assets
 
 
   # File Type Helpers

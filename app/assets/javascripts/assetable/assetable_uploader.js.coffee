@@ -134,6 +134,7 @@
         $(this).removeClass "droppable" if $(this).hasClass("droppable")
 
       $(draggable_selector).on "drop", ->
+        $(this).find('.alert').remove()
         $(this).removeClass "droppable" if $(this).hasClass("droppable")
 
 
