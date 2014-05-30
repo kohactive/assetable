@@ -20,8 +20,8 @@ module Assetable::Uploaders
     ActionController::Base.new.send(:render_to_string, partial: "assetable/shared/templates/#{type.downcase.to_s}_item", locals: { asset: asset, fieldname: fieldname })
   end
 
-  def directions_html
-    ActionController::Base.new.send(:render_to_string, :partial => 'assetable/assets/directions')
+  def directions_html directions=nil
+    ActionController::Base.new.send(:render_to_string, partial: 'assetable/assets/directions', locals: {directions: directions})
   end
 
 end

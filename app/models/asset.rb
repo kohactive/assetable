@@ -19,8 +19,9 @@ class Asset < ActiveRecord::Base
   has_many :asset_attachments, :as => :assetable, :dependent => :destroy
   has_many :assetable, :through => :asset_attachments
   
-  before_save :update_asset_attributes
+  before_validation :update_asset_attributes
 
+  validates_uniqueness_of :checksum
 
 
   # File Type Helpers
