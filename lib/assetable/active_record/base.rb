@@ -15,7 +15,7 @@ module Assetable
             # Hack to fix the has_one accessor from not correctly guessing namespace of source association
             class_eval %Q"
               def #{arg}
-                #{arg}_association.asset
+                #{arg}_association.try(:asset) || super
               end
             "
 
