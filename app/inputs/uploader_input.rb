@@ -19,7 +19,7 @@ class UploaderInput < SimpleForm::Inputs::FileInput
 
     # Create and return the uploader html
     directions = options[:directions]
-    uploader_wrapper = template.content_tag :div, (uploader_html + directions_html(directions).html_safe), class: "assetable-uploader"
+    uploader_wrapper = template.content_tag :div, (uploader_html + directions_html(directions, attribute_name).html_safe), class: "assetable-uploader"
     return uploader_wrapper
   end
 
