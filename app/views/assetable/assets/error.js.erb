@@ -1,0 +1,3 @@
+var uploader = $('#<%= @uploader_id %>');
+
+$('#<%= @uploader_id %>').append('<%= j render partial: "assetable/shared/templates/asset_error", locals: { asset: @asset, fieldname: @fieldname } %>');

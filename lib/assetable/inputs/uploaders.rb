@@ -21,7 +21,7 @@ module Assetable::Uploaders
   end
 
   def directions_html
-    ac.send(:render_to_string, :partial => 'assetable/assets/directions')
+    ac.send(:render_to_string, :partial => 'assetable/assets/directions', locals: {directions: directions})
   end
 
   def ac

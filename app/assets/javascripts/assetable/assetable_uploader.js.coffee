@@ -81,6 +81,9 @@
           ,
             title: "Zip Files"
             extensions: "zip"
+          ,
+            title: "Documents"
+            extensions: "pdf,doc,docx,xls,xlsx"
           ]
           max_file_size: assetable_uploader.options.max_file_size
           prevent_duplicates: true
@@ -131,6 +134,7 @@
         $(this).removeClass "droppable" if $(this).hasClass("droppable")
 
       $(draggable_selector).on "drop", ->
+        $(this).find('.alert').remove()
         $(this).removeClass "droppable" if $(this).hasClass("droppable")
 
 

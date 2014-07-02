@@ -9,7 +9,7 @@ bind_uploaders = ->
       $this.assetable_uploader
         multi_selection: false
         url: "/assetable/assets.js"
-        # directions: $this.attr('data-uploader-directions')
+        directions: $this.attr('data-uploader-directions')
         # max_file_size: $this.attr("data-max-file-size")
         authenticity_token: $("meta[name=\"csrf-token\"]").attr("content")
         fileRemoved: (item, button) ->

@@ -31,9 +31,9 @@ class Assetable::AssetsController < ActionController::Base
     end
 
     # Return
+    @fieldname = params[:fieldname]
+    @uploader_id = params[:uploader_id]
     if @asset.errors.empty? and @asset.save
-      @fieldname = params[:fieldname]
-      @uploader_id = params[:uploader_id]
       render :create
     else
       render :error
