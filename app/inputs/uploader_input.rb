@@ -3,6 +3,7 @@ class UploaderInput < SimpleForm::Inputs::FileInput
   include Assetable::Uploaders
 
   def input
+
     # Create the hidden input as fields_for
     fieldname = "#{object_name}[#{attribute_name}_association_attributes][asset_id]"
 

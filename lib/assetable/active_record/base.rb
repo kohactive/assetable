@@ -9,11 +9,19 @@ module Assetable
       def assetable *args
         if args.present?
           args.each do |arg|
-            has_one :"#{arg}_association", -> { where(name: arg) }, class_name: "AssetAttachment", as: :assetable
-            has_one arg, through: :"#{arg}_association", source: :asset
+            has_one :"#{arg}_association", -> { where(name: arg) }, class_name: "Assetabler::AssetAttachment", as: :assetable
+            has_one arg, through: :"#{arg}_association", :source => :asset
             accepts_nested_attributes_for :"#{arg}_association", allow_destroy: true
+            # Hack to fix the has_one accessor from not correctly guessing namespace of source association
+            class_eval %Q"
+              def #{arg}
+                #{arg}_association.asset
+              end
+            "
+
           end
         end
+
       end
 
       # Galleries
@@ -26,7 +34,7 @@ module Assetable
         
         if args.present?
           args.each do |arg|
-            has_one arg, -> { where(name: arg) }, class_name: "Gallery", as: :galleryable
+            has_one arg, -> { where(name: arg) }, class_name: "Assetabler::Gallery", as: :galleryable
             accepts_nested_attributes_for arg
           end
         end

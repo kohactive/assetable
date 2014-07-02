@@ -3,7 +3,7 @@ class Assetable::AssetsController < ActionController::Base
   respond_to :html, :js
 
   def index
-    @assets = Asset.page(params[:page]).per(20)
+    @assets = Assetabler::Asset.page(params[:page]).per(20)
     @fieldname = params[:fieldname]
     @uploader_id = params[:uploader_id]
   end
@@ -12,7 +12,7 @@ class Assetable::AssetsController < ActionController::Base
   def insert
     @fieldname = params[:fieldname]
     @uploader_id = params[:uploader_id]
-    @assets = Asset.find(params[:asset_ids])
+    @assets = Assetabler::Asset.find(params[:asset_ids])
   end
 
   # Create a new asset
@@ -23,11 +23,11 @@ class Assetable::AssetsController < ActionController::Base
 
     # Create the appropriate model
     if content_type.split("/").first == "image"
-      @asset = Image.new(asset_params)
+      @asset = Assetabler::Image.new(asset_params)
     elsif content_type.split("/").first == "video"
-      @asset = Video.new(asset_params)
+      @asset = Assetabler::Video.new(asset_params)
     elsif content_type.split("/").first == "application"
-      @asset = Document.new(asset_params)
+      @asset = Assetabler::Document.new(asset_params)
     end
 
     # Return
@@ -42,12 +42,12 @@ class Assetable::AssetsController < ActionController::Base
 
   # Edit an asset will return the edit form
   def edit
-    @asset = Asset.find(params[:id])
+    @asset = Assetabler::Asset.find(params[:id])
   end
 
   # Update an asset
   def update
-    @asset = Asset.find(params[:id])
+    @asset = Assetabler::Asset.find(params[:id])
     @asset.update_attributes(permitted_params)
   end
 
