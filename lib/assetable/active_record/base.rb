@@ -28,7 +28,7 @@ module Assetable
       def galleryable *args
         # By default, let's include a gallery. 
         unless args.include? :gallery
-          has_one :gallery, as: :galleryable, dependent: :destroy
+          has_one :gallery, class_name: "Assetabler::Gallery", as: :galleryable, dependent: :destroy
           accepts_nested_attributes_for :gallery
         end
         

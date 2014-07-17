@@ -21,7 +21,8 @@ class GalleryInput < SimpleForm::Inputs::FileInput
     uploader_html = template.content_tag(:div, (gallery_hidden_input + preview), class: "uploader-assets-wrapper")
 
     # Create and return the uploader html
-    uploader_wrapper = template.content_tag :div, (uploader_html + hidden_input + directions_html.html_safe), class: "gallery-uploader"
+    directions = options[:directions]
+    uploader_wrapper = template.content_tag :div, (uploader_html + hidden_input + directions_html(directions, attribute_name).html_safe), class: "gallery-uploader"
     return uploader_wrapper
   end
 
