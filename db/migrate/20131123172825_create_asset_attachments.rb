@@ -8,7 +8,7 @@ class CreateAssetAttachments < ActiveRecord::Migration
     end
 
     add_index :assetable_asset_attachments, :asset_id
-    add_index :assetable_asset_attachments, [:assetable_type, :assetable_id], name: "poly_asset"
+    add_index :assetable_asset_attachments, [:assetable_type, :assetable_id], name: "poly_asset_attachment"
     add_index :assetable_asset_attachments, [:assetable_type, :assetable_id, :name], unique: true, name: "named_asset"
     add_index :assetable_asset_attachments, :assetable_id
   end
