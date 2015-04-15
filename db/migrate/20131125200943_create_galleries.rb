@@ -6,7 +6,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :assetable_galleries, [:galleryable_type, :galleryable_id], name: "poly_asset"
+    add_index :assetable_galleries, [:galleryable_type, :galleryable_id], name: "poly_asset_gallery"
     add_index :assetable_galleries, [:galleryable_type, :galleryable_id, :name], unique: true, name: "named_gallery"
 
     add_index :assetable_galleries, :galleryable_id
