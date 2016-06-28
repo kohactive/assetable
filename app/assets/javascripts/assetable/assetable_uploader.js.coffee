@@ -74,7 +74,7 @@
         filters:
           mime_types : [
             title: "Image files"
-            extensions: "jpg,gif,png"
+            extensions: "jpg,jpeg,gif,png"
           ,
             title: "Video files"
             extensions: "mov,mp4,mpeg4"
