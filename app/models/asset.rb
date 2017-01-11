@@ -68,3 +68,7 @@ class Asset < ActiveRecord::Base
   end
 
 end
+
+%w(document external_service image video).each do |r| 
+  require_dependency r
+end if Rails.env.development?
