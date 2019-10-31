@@ -9,3 +9,5 @@ spec/dummy/.sass-cache
 spec/dummy/public/uploads
 *.gem
 .rvmrc
+.ruby-version
+.ruby-gemset
