@@ -7,7 +7,7 @@ gem 'railties', '~> 4.0.0'
 
 gem 'sqlite3'
 
-gem 'carrierwave'
+gem 'carrierwave', '>= 0.9.0'
 gem 'fog'
 gem 'kaminari'
 gem 'plupload-rails'
