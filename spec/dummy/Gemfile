@@ -9,7 +9,7 @@ gem 'sqlite3'
 
 gem 'carrierwave'
 gem 'fog'
-gem 'kaminari'
+gem 'kaminari', '>= 1.2.1'
 gem 'plupload-rails'
 
 gem 'haml-rails'
