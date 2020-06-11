@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'carrierwave', '0.10.0'
   s.add_dependency 'fog', '>= 1.8.0'
-  s.add_dependency 'kaminari', '~> 0.15.1'
+  s.add_dependency 'kaminari', '~> 1.2.1'
   s.add_dependency 'rmagick', '~> 2.13.2'
   s.add_dependency 'plupload-rails', '~> 1.2.1'
   s.add_dependency 'simple_form', '~> 3.2.0'
