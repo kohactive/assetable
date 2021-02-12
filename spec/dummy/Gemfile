@@ -10,7 +10,7 @@ gem 'sqlite3'
 gem 'carrierwave'
 gem 'fog'
 gem 'kaminari'
-gem 'plupload-rails'
+gem 'plupload-rails', '>= 1.1.0'
 
 gem 'haml-rails'
 gem 'jquery-rails'
