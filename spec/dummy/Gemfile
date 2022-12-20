@@ -14,6 +14,6 @@ gem 'plupload-rails'
 
 gem 'haml-rails'
 gem 'jquery-rails'
-gem 'sass-rails'
+gem 'sass-rails', '>= 5.0.0'
 gem 'bootstrap_sass_rails'
 gem 'simple_form'
