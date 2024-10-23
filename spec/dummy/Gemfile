@@ -2,18 +2,18 @@ source 'https://rubygems.org'
 
 gem 'activerecord', '~> 4.0.0'
 gem 'activeresource', '~> 4.0.0'
-gem 'actionmailer', '~> 4.0.0'
-gem 'railties', '~> 4.0.0'
+gem 'actionmailer', '~> 6.1.7', '>= 6.1.7.9'
+gem 'railties', '~> 6.1.7', '>= 6.1.7.9'
 
 gem 'sqlite3'
 
 gem 'carrierwave'
 gem 'fog'
-gem 'kaminari'
+gem 'kaminari', '>= 1.0.0'
 gem 'plupload-rails'
 
 gem 'haml-rails'
 gem 'jquery-rails'
-gem 'sass-rails'
+gem 'sass-rails', '>= 6.0.0'
 gem 'bootstrap_sass_rails'
 gem 'simple_form'
